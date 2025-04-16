@@ -1,0 +1,529 @@
+<!doctype html>
+<html class="no-js" lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Réservations - Localoo</title>
+    <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootsnav.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Styles spécifiques à la page de réservation */
+        .page-header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/images/reservation-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .reservation-types {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .reservation-type {
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .reservation-type:hover {
+            background: #f8fafb;
+        }
+        
+        .reservation-type.active {
+            border-left: 4px solid #81D8D0;
+            background: #f8fafb;
+        }
+        
+        .reservation-type i {
+            font-size: 30px;
+            color: #81D8D0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .reservation-type h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+        
+        .reservation-form-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            height: 100%;
+        }
+        
+        .reservation-form {
+            display: none;
+        }
+        
+        .reservation-form.active {
+            display: block;
+        }
+        
+        .recommendations {
+            margin-top: 60px;
+        }
+        
+        .recommendations h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .recommendation-item {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .recommendation-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .recommendation-details {
+            padding: 20px;
+        }
+        
+        .recommendation-details h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .rating {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .price span {
+            color: #81D8D0;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 60px 0;
+            }
+            
+            .page-header h1 {
+                font-size: 32px;
+            }
+            
+            .reservation-types {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Area Start -->
+    <section class="top-area">
+        <div class="header-area">
+            <nav class="navbar navbar-default bootsnav navbar-sticky">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="index.html">
+                            <img src="assets/images/logolocaloo.png" alt="Localoo Logo">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><a href="emploi.html">Emploi</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li class="active"><a href="reservation.html">Réservation</a></li>
+                            <li><a href="reclamation.html">Réclamation</a></li>
+                            <li><a href="forum.html">Forum</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+    <!-- Top Area End -->
+    
+    <!-- Page Header Start -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Réservations</h1>
+            <p>Réservez vos hôtels, restaurants et activités en ligne</p>
+        </div>
+    </section>
+    <!-- Page Header End -->
+
+    <!-- Reservation Section Start -->
+    <section class="reservation-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="reservation-types">
+                        <div class="reservation-type active" data-type="hotel">
+                            <i class="fa fa-hotel"></i>
+                            <h3>Hôtels</h3>
+                        </div>
+                        <div class="reservation-type" data-type="restaurant">
+                            <i class="fa fa-cutlery"></i>
+                            <h3>Restaurants</h3>
+                        </div>
+                        <div class="reservation-type" data-type="activity">
+                            <i class="fa fa-ticket"></i>
+                            <h3>Activités</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="reservation-form-container">
+                        <!-- Formulaire Hôtel -->
+                        <div class="reservation-form hotel-form active">
+                            <h3>Réserver un hôtel</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Destination</label>
+                                            <input type="text" class="form-control" placeholder="Où allez-vous?">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Dates de séjour</label>
+                                            <input type="text" class="form-control" placeholder="Sélectionnez vos dates">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Adultes</label>
+                                            <select class="form-control">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Enfants</label>
+                                            <select class="form-control">
+                                                <option>0</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Chambres</label>
+                                            <select class="form-control">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Rechercher des hôtels</button>
+                            </form>
+                        </div>
+
+                        <!-- Formulaire Restaurant -->
+                        <div class="reservation-form restaurant-form">
+                            <h3>Réserver un restaurant</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nom du restaurant</label>
+                                            <input type="text" class="form-control" placeholder="Rechercher un restaurant">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Ville</label>
+                                            <input type="text" class="form-control" placeholder="Sélectionnez une ville">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date</label>
+                                            <input type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Heure</label>
+                                            <input type="time" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nombre de personnes</label>
+                                            <select class="form-control">
+                                                <option>1 personne</option>
+                                                <option>2 personnes</option>
+                                                <option>3 personnes</option>
+                                                <option>4 personnes</option>
+                                                <option>5+ personnes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Type de cuisine</label>
+                                            <select class="form-control">
+                                                <option>Toutes cuisines</option>
+                                                <option>Tunisienne</option>
+                                                <option>Internationale</option>
+                                                <option>Italienne</option>
+                                                <option>Française</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Rechercher des restaurants</button>
+                            </form>
+                        </div>
+
+                        <!-- Formulaire Activité -->
+                        <div class="reservation-form activity-form">
+                            <h3>Réserver une activité</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Type d'activité</label>
+                                            <select class="form-control">
+                                                <option>Toutes activités</option>
+                                                <option>Excursions</option>
+                                                <option>Sports</option>
+                                                <option>Culture</option>
+                                                <option>Divertissement</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Localisation</label>
+                                            <input type="text" class="form-control" placeholder="Où souhaitez-vous faire cette activité?">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date</label>
+                                            <input type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nombre de participants</label>
+                                            <select class="form-control">
+                                                <option>1 personne</option>
+                                                <option>2 personnes</option>
+                                                <option>3-5 personnes</option>
+                                                <option>6-10 personnes</option>
+                                                <option>10+ personnes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Budget approximatif</label>
+                                    <select class="form-control">
+                                        <option>Tous budgets</option>
+                                        <option>Moins de 50 TND</option>
+                                        <option>50-100 TND</option>
+                                        <option>100-200 TND</option>
+                                        <option>200+ TND</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Rechercher des activités</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <h3>Nos recommandations</h3>
+                <div class="row">
+                    <!-- Hôtel recommandé -->
+                    <div class="col-md-4">
+                        <div class="recommendation-item">
+                            <img src="assets/images/hotels/hotel1.jpg" alt="Hôtel Golden Tulip">
+                            <div class="recommendation-details">
+                                <h4>Golden Tulip Tunis</h4>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <p class="price">À partir de <span>350 TND</span>/nuit</p>
+                                <a href="#" class="btn btn-primary btn-sm btn-block">Voir disponibilités</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Restaurant recommandé -->
+                    <div class="col-md-4">
+                        <div class="recommendation-item">
+                            <img src="assets/images/restaurants/resto1.jpg" alt="Restaurant Le Golfe">
+                            <div class="recommendation-details">
+                                <h4>Le Golfe</h4>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-half-o"></i>
+                                </div>
+                                <p class="price">Menu à partir de <span>45 TND</span></p>
+                                <a href="#" class="btn btn-primary btn-sm btn-block">Réserver une table</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activité recommandée -->
+                    <div class="col-md-4">
+                        <div class="recommendation-item">
+                            <img src="assets/images/activities/activity1.jpg" alt="Excursion à Sidi Bou Said">
+                            <div class="recommendation-details">
+                                <h4>Excursion à Sidi Bou Said</h4>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <p class="price">À partir de <span>120 TND</span>/personne</p>
+                                <a href="#" class="btn btn-primary btn-sm btn-block">Réserver maintenant</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Reservation Section End -->
+
+    <!-- Footer Start -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-about">
+                        <h3>À propos de Localoo</h3>
+                        <p>La plateforme locale tunisienne qui connecte les gens aux services et opportunités près de chez eux.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-links">
+                        <h3>Liens rapides</h3>
+                        <ul>
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><a href="emploi.html">Emploi</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li><a href="reservation.html">Réservations</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-social">
+                        <h3>Suivez-nous</h3>
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Localoo. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- JS Files -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootsnav.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Gestion des onglets de réservation
+            $('.reservation-type').click(function() {
+                $('.reservation-type').removeClass('active');
+                $(this).addClass('active');
+                
+                var type = $(this).data('type');
+                $('.reservation-form').removeClass('active');
+                $('.' + type + '-form').addClass('active');
+            });
+            
+            // Highlight le menu actif
+            var current = location.pathname.split('/').pop();
+            $('.nav li a').each(function() {
+                var $this = $(this);
+                if($this.attr('href') === current) {
+                    $this.parent().addClass('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

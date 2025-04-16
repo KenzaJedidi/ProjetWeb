@@ -1,0 +1,1878 @@
+<!doctype html>
+<html class="no-js" lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forum - Localoo</title>
+    <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootsnav.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Forum CSS -->
+    <style>
+        /* Forum Styles */
+        .forum-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .forum-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .forum-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .forum-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .forum-tabs {
+            display: flex;
+        }
+        
+        .forum-tab {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            margin-right: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .forum-tab.active {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .forum-content {
+            display: none;
+        }
+        
+        .forum-content.active {
+            display: block;
+        }
+        
+        /* Post Styles */
+        .post-card {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .post-user {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .post-content {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            max-width: 100%;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .post-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .vote-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .vote-btn.active {
+            color: #ff6b6b;
+        }
+        
+        .vote-count {
+            font-weight: 600;
+            margin: 0 10px;
+        }
+        
+        .comment-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-btn i {
+            margin-right: 5px;
+        }
+        
+        .post-owner-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .post-owner-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        /* Comment Styles */
+        .comment-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .comment-form h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        
+        .comments-section {
+            margin-top: 30px;
+        }
+        
+        .comment-card {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .comment-time {
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        .comment-content {
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .comment-actions {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .comment-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-right: 10px;
+        }
+        
+        /* Create Post Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+        }
+        
+        .submit-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ff5252;
+        }
+        
+        /* Additional design for the admin page  */
+        body {
+            background-color: #f2f4f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+      background-color: #f2f4f7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Conteneur principal du forum */
+    .forum-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    .forum-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .forum-header h2 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .forum-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .forum-tab {
+      padding: 10px 20px;
+      background: #f5f5f5;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .forum-tab.active {
+      background: #ff6b6b;
+      color: white;
+    }
+    .forum-content { display: none; }
+    .forum-content.active { display: block; }
+
+    /* Posts */
+    .post-card {
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      position: relative;
+    }
+    .post-header { display: flex; align-items: center; margin-bottom: 15px; }
+    .post-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #f5f5f5; display: flex; align-items: center; justify-content: center;
+      margin-right: 15px; color: #ff6b6b; font-weight: bold;
+    }
+    .post-user { font-weight: 600; color: #333; }
+    .post-time { font-size: 12px; color: #999; margin-left: 10px; }
+    .post-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #333; }
+    .post-content { color: #555; margin-bottom: 15px; }
+    .post-image { max-width: 100%; border-radius: 4px; margin-bottom: 15px; }
+    .post-actions { display: flex; align-items: center; }
+    .vote-btn, .comment-btn {
+      background: none; border: none; cursor: pointer;
+      color: #999; font-size: 18px; margin-right: 10px;
+    }
+    .vote-count { font-weight: 600; margin: 0 10px; }
+    
+    /* Sidebar */
+    .forum-sidebar { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    .sidebar-widget { margin-bottom: 30px; }
+    .sidebar-widget h3 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+    .stats-list { list-style: none; padding: 0; }
+    .stats-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+    .stats-list li span { font-weight: 600; }
+
+    /* Auth styles */
+    .auth-container {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .auth-header { text-align: center; margin-bottom: 30px; }
+    .auth-header h2 { color: #333; margin-bottom: 10px; }
+    .auth-footer { text-align: center; margin-top: 20px; font-size: 14px; }
+    .auth-footer a { color: #ff6b6b; text-decoration: none; }
+    .error-message { color: #ff6b6b; font-size: 14px; margin-top: 5px; }
+    
+    /* Page Header */
+    .page-header {
+      background-color: #f8f9fa;
+      padding: 60px 0;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .page-header h1 { font-size: 36px; color: #333; margin-bottom: 15px; }
+    .page-header p { font-size: 18px; color: #666; }
+    .forum-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .forum-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .forum-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .forum-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .forum-tabs {
+            display: flex;
+        }
+        
+        .forum-tab {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            margin-right: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .forum-tab.active {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .forum-content {
+            display: none;
+        }
+        
+        .forum-content.active {
+            display: block;
+        }
+        
+        /* Post Styles */
+        .post-card {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .post-user {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .post-content {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            max-width: 100%;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .post-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .vote-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .vote-btn.active {
+            color: #ff6b6b;
+        }
+        
+        .vote-count {
+            font-weight: 600;
+            margin: 0 10px;
+        }
+        
+        .comment-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-btn i {
+            margin-right: 5px;
+        }
+        
+        .post-owner-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .post-owner-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        /* Comment Styles */
+        .comment-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .comment-form h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        
+        .comments-section {
+            margin-top: 30px;
+        }
+        
+        .comment-card {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .comment-time {
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        
+        .comment-content {
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .comment-actions {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .comment-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            margin-right: 10px;
+        }
+        
+        /* Create Post Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+        }
+        
+        .submit-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ff5252;
+        }
+        
+        /* Advanced Reactions */
+        .reaction-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .reaction-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .reaction-count {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        /* Advanced Search */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-filter {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-btn:hover {
+            background-color: #ff5252;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Saved Posts */
+        .saved-posts-container {
+            margin-top: 30px;
+        }
+
+        .saved-post-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .saved-post-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Similar Posts */
+        .similar-posts-container {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .similar-post-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .similar-post-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background-color: #f8f9fa;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        /* Forum Sidebar */
+        .forum-sidebar {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-widget {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-widget h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stats-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .stats-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .stats-list li span {
+            font-weight: 600;
+        }
+        
+        .active-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .member {
+            text-align: center;
+        }
+        
+        .member img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+        
+        .popular-topics {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .popular-topics li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .popular-topics li a {
+            color: #333;
+        }
+        
+        .popular-topics li a:hover {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="top-area">
+      <div class="header-area">
+          <nav class="navbar navbar-default bootsnav navbar-sticky">
+              <div class="container">
+                  <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                          <i class="fa fa-bars"></i>
+                      </button>
+                      <a class="navbar-brand" href="index.html">
+                          <img src="assets/images/logolocaloo.png" alt="Localoo Logo">
+                      </a>
+                  </div>
+                  <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                      <ul class="nav navbar-nav navbar-right">
+                          <li><a href="index.html">Accueil</a></li>
+                          <li><a href="emploi.html">Emploi</a></li>
+                          <li><a href="events.html">Events</a></li>
+                          <li><a href="reservation.html">Réservation</a></li>
+                          <li><a href="reclamation.html">Réclamation</a></li>
+                          <li class="active"><a href="forum.html">Forum</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </nav>
+      </div>
+  </section>
+  
+    <!-- Forum Section -->
+    <section id="blog" class="forum-section">
+
+        <div class="container">
+          <div class="forum-container">
+            <div class="forum-header">
+              <h2>Community Forum</h2>
+              <p>Join the discussion and share your thoughts with the community</p>
+            </div>
+            <div class="search-container" style="margin-bottom: 20px;">
+  <input type="text" id="search-keywords" class="search-input" placeholder="Rechercher...">
+  <button class="btn btn-primary" onclick="searchPosts()">Rechercher</button>
+</div>
+<div class="sidebar-widget">
+    <h3>Statistiques du Forum</h3>
+    <ul class="stats-list">
+      <li><span>Membres:</span> <span id="stats-members">0</span></li>
+      <li><span>Posts:</span> <span id="stats-posts">0</span></li>
+      <li><span>Commentaires:</span> <span id="stats-comments">0</span></li>
+    </ul>
+  </div>
+  
+            <div class="forum-nav">
+              <div class="forum-tabs">
+                <div class="forum-tab active" onclick="showForumTab('posts')">Posts</div>
+                <div class="forum-tab" onclick="showForumTab('create')">Create Post</div>
+                <div id="auth-tab" class="forum-tab" onclick="showForumTab('auth')">Login/Register</div>
+              </div>
+              <button id="logout-btn" class="btn btn-primary" style="display: none;" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Posts Tab -->
+            <div id="posts-tab" class="forum-content active">
+              <div id="posts-list">
+                <!-- Les posts chargés depuis le backend apparaîtront ici -->
+              </div>
+            </div>
+            
+            <!-- Create Post Tab -->
+            <div id="create-tab" class="forum-content">
+              <div class="auth-container">
+                <div class="auth-header">
+                  <h2>Create New Post</h2>
+                </div>
+                <form id="create-post-form">
+                  <div class="form-group">
+                    <label for="post-title">Title</label>
+                    <input type="text" id="post-title" class="form-control" required>
+                    <div id="post-title-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="post-content">Content</label>
+                    <textarea id="post-content" class="form-control" required></textarea>
+                    <div id="post-content-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="post-image">Image (optional)</label>
+                    <input type="file" id="post-image" accept="image/*">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create Post</button>
+                </form>
+              </div>
+            </div>
+            
+            <!-- Auth Tab -->
+            <div id="auth-tab-content" class="forum-content">
+              <!-- Login Form -->
+              <div class="auth-container" id="login-container">
+                <div class="auth-header">
+                  <h2>Login</h2>
+                </div>
+                <form id="login-form">
+                  <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" class="form-control" required>
+                    <div id="login-username-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                    <div id="login-password-error" class="error-message"></div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <div class="auth-footer">
+                  Don't have an account? <a href="#" onclick="showForumTab('register')">Register</a>
+                </div>
+              </div>
+            
+              <!-- Register Form -->
+              <div class="auth-container" id="register-container" style="display: none;">
+                <div class="auth-header">
+                  <h2>Register</h2>
+                </div>
+                <form id="register-form">
+                  <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" class="form-control" required>
+                    <div id="register-username-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" class="form-control" required>
+                    <div id="register-password-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="register-confirm-password">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" class="form-control" required>
+                    <div id="register-confirm-password-error" class="error-message"></div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <div class="auth-footer">
+                  Already have an account? <a href="#" onclick="showForumTab('auth')">Login</a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Bouton Logout (à placer par exemple dans la barre de navigation) -->
+            <button id="logout-btn" class="btn btn-primary" onclick="logout()" style="display: none;">Logout</button>
+            
+            
+            <!-- Post Detail View (hidden by default) -->
+            <div id="post-detail-view" class="forum-content" style="display: none;">
+              <div class="post-card">
+                <div class="post-header">
+                  <div class="post-avatar" id="post-detail-avatar">U</div>
+                  <div>
+                    <span class="post-user" id="post-detail-user">Username</span>
+                    <span class="post-time" id="post-detail-time">Jan 1, 2023</span>
+                  </div>
+                  <div id="post-owner-actions" class="post-owner-actions" style="display: none;">
+                    <button onclick="editCurrentPost()"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteCurrentPost()"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+                <h3 class="post-title" id="post-detail-title">Post Title</h3>
+                <div class="post-content" id="post-detail-content">
+                  Post content goes here...
+                </div>
+                <div id="post-detail-image-container" style="display: none;">
+                  <img id="post-detail-image" src="" alt="Post image" class="post-image">
+                </div>
+                <div class="post-actions">
+                  <button class="vote-btn upvote" id="upvote-btn" onclick="votePost(currentPostId, 'up')">
+                    <i class="fa fa-arrow-up"></i>
+                  </button>
+                  <span class="vote-count" id="post-vote-count">0</span>
+                  <button class="vote-btn downvote" id="downvote-btn" onclick="votePost(currentPostId, 'down')">
+                    <i class="fa fa-arrow-down"></i>
+                  </button>
+                  <button class="comment-btn" onclick="document.getElementById('comment-content').focus()">
+                    <i class="fa fa-comment"></i> Comment
+                  </button>
+                </div>
+              </div>
+              
+              <div class="comment-form">
+                <h3>Add a comment</h3>
+                <form id="comment-form">
+                  <textarea id="comment-content" placeholder="What are your thoughts?" ></textarea>
+                  <div id="comment-error" class="error-message"></div>
+                  <button type="submit" class="btn btn-primary">Comment</button>
+                </form>
+              </div>
+              
+              <div class="comments-section">
+                <h3>Comments</h3>
+                <div id="comments-list"></div>
+                <p class="no-comments" id="no-comments">No comments yet. Be the first to share what you think!</p>
+              </div>
+            </div>
+            
+            <!-- Edit Post Modal -->
+            <div id="edit-post-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Edit Post</h2>
+                  <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="edit-post-form">
+                  <div class="form-group">
+                    <label for="edit-post-title">Title</label>
+                    <input type="text" id="edit-post-title" required>
+                    <div id="edit-post-title-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-post-content">Content</label>
+                    <textarea id="edit-post-content" required></textarea>
+                    <div id="edit-post-content-error" class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-post-image">Image (optional)</label>
+                    <input type="file" id="edit-post-image" accept="image/*">
+                    <div id="current-image-container"></div>
+                  </div>
+                  <button type="submit" class="submit-btn">Update Post</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-menu">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">
+                  <img src="assets/images/logolocaloo.png" alt="Localoo Logo">
+                </a>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <ul class="footer-menu-item">
+                <li class="scroll"><a href="#works">how it works</a></li>
+                <li class="scroll"><a href="#explore">explore</a></li>
+                <li class="scroll"><a href="#reviews">review</a></li>
+                <li class="scroll"><a href="#blog">forum</a></li>
+                <li class="scroll"><a href="#contact">contact</a></li>
+                <li class="scroll"><a href="#account">my account</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="hm-footer-copyright">
+          <div class="row">
+            <div class="col-sm-5">
+              <p>&copy;copyright. designed and developed by <a href="https://www.themesine.com/">themesine</a></p>
+            </div>
+            <div class="col-sm-7">
+              <div class="footer-social">
+                <span><i class="fa fa-phone"> +1 (222) 777 8888</i></span>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-google-plus"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  
+    <!-- JS Files -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootsnav.js"></script>
+    <script src="assets/js/custom.js"></script>
+  
+    <!-- Forum JavaScript Integration with Backend -->
+    <script>
+        // Variables pour l'authentification et le forum
+        let currentUser = null; // À gérer via une session côté backend
+        let currentPostId = null;
+        let currentSort = 'newest';
+  
+        // Au chargement du DOM, chargez les posts et initialisez les formulaires
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadForumStats();
+            loadPosts();
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            document.getElementById('register-form').addEventListener('submit', handleRegister);
+            document.getElementById('create-post-form').addEventListener('submit', handleCreatePost);
+            document.getElementById('comment-form').addEventListener('submit', handleAddComment);
+            document.getElementById('edit-post-form').addEventListener('submit', handleEditPost);
+            initMapMarkers();
+        });
+  
+        // Vérifier l'authentification (exemple simple – à adapter en appelant le backend)
+        function checkAuth() {
+            // Par défaut, on simule qu'aucun utilisateur n'est connecté.
+            // Vous pouvez faire un appel AJAX pour récupérer les infos de session.
+            if (currentUser) {
+                document.getElementById('auth-tab').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block';
+                document.getElementById('create-tab').style.display = 'block';
+            } else {
+                document.getElementById('auth-tab').style.display = 'block';
+                document.getElementById('logout-btn').style.display = 'none';
+                document.getElementById('create-tab').style.display = 'none';
+            }
+        }
+  
+        function showAlert(message, type = 'success') {
+            alert(message);
+        }
+  
+        // Gestion des onglets du forum
+        function showForumTab(tabName) {
+            document.querySelectorAll('.forum-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.forum-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            if (tabName === 'posts') {
+                document.getElementById('posts-tab').style.display = 'block';
+                document.querySelector('.forum-tab[onclick="showForumTab(\'posts\')"]').classList.add('active');
+                loadPosts();
+            } else if (tabName === 'create') {
+                if (!currentUser) {
+                    showAlert('Please login to create a post', 'error');
+                    showForumTab('auth');
+                    return;
+                }
+                document.getElementById('create-tab').style.display = 'block';
+                document.querySelector('.forum-tab[onclick="showForumTab(\'create\')"]').classList.add('active');
+            } else if (tabName === 'auth') {
+                document.getElementById('auth-tab-content').style.display = 'block';
+                document.getElementById('register-container').style.display = 'none';
+                document.querySelector('.forum-tab[onclick="showForumTab(\'auth\')"]').classList.add('active');
+            } else if (tabName === 'register') {
+                document.getElementById('auth-tab-content').style.display = 'block';
+                document.getElementById('register-container').style.display = 'block';
+                document.querySelector('.forum-tab[onclick="showForumTab(\'auth\')"]').classList.add('active');
+            } else if (tabName === 'post-detail') {
+                document.getElementById('post-detail-view').style.display = 'block';
+            }
+        }
+        function handleCreatePost(e) {
+    e.preventDefault();
+  
+    const title = document.getElementById('post-title').value.trim();
+    const content = document.getElementById('post-content').value.trim();
+    const imageInput = document.getElementById('post-image');
+  
+    if (!title || !content) {
+      alert("Title and content are required.");
+      return;
+    }""
+  
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (imageInput.files.length > 0) {
+      formData.append('image', imageInput.files[0]);
+    }
+  
+    fetch('backend/create_post.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Post created!");
+        showForumTab('posts');
+        loadPosts();
+      } else {
+        alert("Error: " + data.error);
+      }
+    })
+    .catch(err => {
+      console.error('Fetch error:', err);
+      alert('An error occurred while creating the post.');
+    });
+  }
+  
+  
+        function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+  
+    fetch('backend/login.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        currentUser = {
+        id: data.user_id,      // 👈 Très important
+        username: data.username
+      };
+        showAlert('Connexion réussie');
+        checkAuth();
+        showForumTab('posts');
+      } else {
+        showAlert(data.error, 'error');
+      }
+    });
+  }
+  function handleRegister(e) {
+    e.preventDefault();
+    const username = document.getElementById('register-username').value;
+    const password = document.getElementById('register-password').value;
+    const confirm = document.getElementById('register-confirm-password').value;
+  
+    fetch('backend/register.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, confirm })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showAlert('Inscription réussie. Connectez-vous !');
+        showForumTab('auth');
+      } else {
+        showAlert(data.error, 'error');
+      }
+    });
+  }
+  function logout() {
+    fetch('backend/logout.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          currentUser = null;
+          showAlert('Déconnecté avec succès');
+          checkAuth();
+          showForumTab('auth');
+        }
+      });
+  }
+  function checkAuth() {
+    fetch('backend/check_session.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.loggedIn) {
+          currentUser = data.username;
+          document.getElementById('logout-btn').style.display = 'block';
+          document.getElementById('auth-tab').style.display = 'none';
+        } else {
+          currentUser = null;
+          document.getElementById('logout-btn').style.display = 'none';
+          document.getElementById('auth-tab').style.display = 'block';
+        }
+      });
+  }
+  
+  
+        // Chargement des posts depuis le backend
+        function loadPosts(searchQuery = '') {
+  const url = searchQuery
+    ? `backend/get_posts.php?search=${encodeURIComponent(searchQuery)}`
+    : 'backend/get_posts.php';
+
+  fetch(url)
+    .then(res => res.json())
+    .then(postsFromDB => {
+      const postsList = document.getElementById('posts-list');
+      postsList.innerHTML = '';
+
+      if (postsFromDB.length === 0) {
+        postsList.innerHTML = '<p style="text-align: center; padding: 20px;">Aucun post ne correspond à votre recherche.</p>';
+        return;
+      }
+
+      postsFromDB.forEach(post => {
+  const netVotes = post.votes || 0;
+  
+  // Vérifier si le post appartient à l'utilisateur connecté
+  let ownerActions = '';
+  if (currentUser && currentUser.id === post.userId) {
+    ownerActions = `
+      <div class="post-owner-actions">
+        <button onclick="deletePost(${post.id})" class="btn btn-sm btn-danger">Delete</button>
+        <button onclick="editCurrentPost(${post.id})" class="btn btn-sm btn-warning">Modify</button>
+      </div>
+    `;
+  }
+  
+  const postElement = document.createElement('div');
+  postElement.className = 'post-card';
+  postElement.innerHTML = `
+    <div class="post-header">
+      <div class="post-avatar">${post.username.charAt(0).toUpperCase()}</div>
+      <div>
+        <span class="post-user">u/${post.username}</span>
+        <span class="post-time">${new Date(post.created_at).toLocaleString()}</span>
+      </div>
+      ${ownerActions}
+    </div>
+    <h3 class="post-title">
+      <a href="#" onclick="showPostDetail('${post.id}')">${post.title}</a>
+    </h3>
+    <div class="post-content">
+      ${post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}
+    </div>
+    ${post.image ? `<img src="uploads/${post.image}" alt="${post.title}" class="post-image">` : ''}
+    <div class="post-actions">
+      <button class="vote-btn" onclick="votePost('${post.id}', 'up')">
+        <i class="fa fa-arrow-up"></i>
+      </button>
+      <span class="vote-count">${netVotes}</span>
+      <button class="vote-btn" onclick="votePost('${post.id}', 'down')">
+        <i class="fa fa-arrow-down"></i>
+      </button>
+      <button class="comment-btn" onclick="showPostDetail('${post.id}')">
+        <i class="fa fa-comment"></i> ${post.comment_count || 0} Comments
+      </button>
+      <!-- Section pour les réactions emoji sera ajoutée ici -->
+      <div class="reaction-buttons">
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'like')">👍</button>
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'love')">❤️</button>
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'laugh')">😂</button>
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'wow')">😮</button>
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'sad')">😢</button>
+        <button class="reaction-btn" onclick="addReaction('${post.id}', 'angry')">😠</button>
+      </div>
+    </div>
+  `;
+  postsList.appendChild(postElement);
+});
+
+    })
+    .catch(err => {
+      console.error('Erreur lors du chargement des posts:', err);
+    });
+}
+function addReaction(postId, reactionType) {
+  if (!currentUser) {
+    alert('Veuillez vous connecter pour réagir');
+    showForumTab('auth');
+    return;
+  }
+  fetch('backend/reaction.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId, reaction_type: reactionType, user_id: currentUser.id })
+  })
+  .then(res => res.json())
+  .then(response => {
+    if (response.success) {
+      loadPosts();
+    } else {
+      alert('Erreur: ' + response.error);
+    }
+  })
+  .catch(err => {
+    console.error('Erreur lors de l\'ajout de la réaction:', err);
+    alert('Une erreur inattendue est survenue');
+  });
+}
+
+
+
+function deletePost(postId) {
+  if (!confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) return;
+  
+  // Vérifiez ici que postId est bien défini
+  console.log('deletePost: postId =', postId);
+  
+  fetch('backend/delete_post.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ post_id: postId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Post supprimé avec succès');
+      location.reload(); // Rafraîchit la page après la suppression
+    } else {
+      alert('Erreur: ' + data.error);
+    }
+  })
+  .catch(err => {
+    console.error('Erreur lors de la suppression du post:', err);
+  });
+}
+
+  
+        function showPostDetail(postId) {
+            currentPostId = postId;
+            showForumTab('post-detail');
+            loadPostDetail(postId);
+        }
+  
+        function loadPostDetail(postId) {
+            fetch('backend/get_post_detail.php?post_id=' + postId) // endpoint à créer pour obtenir tous détails
+            .then(res => res.json())
+            .then(post => {
+                if (!post) {
+                    showAlert('Post not found', 'error');
+                    showForumTab('posts');
+                    return;
+                }
+                document.getElementById('post-detail-avatar').textContent = post.username.charAt(0).toUpperCase();
+                document.getElementById('post-detail-user').textContent = post.username;
+                document.getElementById('post-detail-time').textContent = new Date(post.created_at).toLocaleString();
+                document.getElementById('post-detail-title').textContent = post.title;
+                document.getElementById('post-detail-content').textContent = post.content;
+                const votes = post.votes || 0;
+                document.getElementById('post-vote-count').textContent = votes;
+                let userVote = null; // à récupérer via backend si besoin
+                const upvoteBtn = document.getElementById('upvote-btn');
+                const downvoteBtn = document.getElementById('downvote-btn');
+                upvoteBtn.classList.remove('active');
+                downvoteBtn.classList.remove('active');
+                if (userVote === 'up') {
+                    upvoteBtn.classList.add('active');
+                } else if (userVote === 'down') {
+                    downvoteBtn.classList.add('active');
+                }
+                const imageContainer = document.getElementById('post-detail-image-container');
+                if (post.image) {
+                    document.getElementById('post-detail-image').src = "uploads/" + post.image;
+                    imageContainer.style.display = 'block';
+                } else {
+                    imageContainer.style.display = 'none';
+                }
+                // Afficher boutons d'édition/suppression si post appartient à currentUser
+                const postActionsOwner = document.getElementById('post-owner-actions');
+                if (currentUser && currentUser.id === post.userId) {
+  document.getElementById('post-owner-actions').style.display = 'block';
+} else {
+  document.getElementById('post-owner-actions').style.display = 'none';
+}
+
+                loadComments(postId);
+            })
+            .catch(err => {
+                console.error('Error loading post detail:', err);
+            });
+        }
+  
+        function loadComments(postId) {
+      fetch('backend/get_comments.php?post_id=' + postId)
+      .then(res => res.json())
+      .then(commentsData => {
+          const commentsList = document.getElementById('comments-list');
+          const noComments = document.getElementById('no-comments');
+          commentsList.innerHTML = '';
+          
+          if (commentsData.length === 0) {
+              noComments.style.display = 'block';
+              return;
+          }
+          
+          noComments.style.display = 'none';
+          
+          commentsData.forEach(comment => {
+              const commentElement = document.createElement('div');
+              commentElement.className = 'comment-card';
+              commentElement.innerHTML = `
+                  <div class="comment-header">
+                      <span class="comment-user">u/${comment.username || "Anonyme"}</span>
+                      <span class="comment-time">${new Date(comment.created_at).toLocaleString()}</span>
+                  </div>
+                  <div class="comment-content">
+                      ${comment.content}
+                  </div>
+                  ${ currentUser && currentUser.id === comment.user_id ? `
+                      <div class="comment-actions">
+                          <button onclick="editComment('${comment.id}')">Edit</button>
+                          <button onclick="deleteComment('${comment.id}')">Delete</button>
+                      </div>
+                  ` : '' }
+              `;
+              commentsList.appendChild(commentElement);
+          });
+      })
+      .catch(err => {
+          console.error('Error loading comments:', err);
+      });
+  }
+  
+  
+  function handleAddComment(e) {
+    e.preventDefault(); // Empêche le rechargement de la page
+  
+    const content = document.getElementById('comment-content').value.trim();
+    const errorDiv = document.getElementById('comment-error');
+  
+    if (!currentUser) {
+      showAlert('Veuillez vous connecter pour commenter.', 'error');
+      showForumTab('auth');
+      return;
+    }
+  
+    if (!content) {
+      errorDiv.textContent = "Le commentaire ne peut pas être vide.";
+      return;
+    } else {
+      errorDiv.textContent = "";
+    }
+  
+    const formData = new FormData();
+    formData.append('post_id', currentPostId); // Assure-toi que currentPostId est bien défini globalement
+    formData.append('content', content);
+  
+    fetch('backend/add_comment.php', {
+    method: 'POST',
+    body: formData,
+    credentials: 'include' // << AJOUTER ÇA !
+  })
+  
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('comment-content').value = '';
+        showAlert('Commentaire ajouté !');
+        loadComments(currentPostId); // Recharge les commentaires pour ce post
+      } else {
+        errorDiv.textContent = data.error || "Une erreur s'est produite.";
+      }
+    })
+    .catch(err => {
+      console.error('Erreur fetch:', err);
+      errorDiv.textContent = "Erreur de réseau.";
+    });
+  }
+  
+  
+        
+  
+  function editCurrentPost(postId) {
+  currentPostId = postId;
+  // Appel au backend pour récupérer les détails du post
+  fetch('backend/get_post_detail.php?post_id=' + postId)
+    .then(res => res.json())
+    .then(post => {
+      if (!post || !currentUser ) {
+        alert('Vous ne pouvez modifier que vos propres posts');
+        return;
+      }
+      // Remplir le formulaire d'édition avec les informations du post
+      document.getElementById('edit-post-title').value = post.title;
+      document.getElementById('edit-post-content').value = post.content;
+      
+      
+      const imageContainer = document.getElementById('current-image-container');
+      if (post.image) {
+        imageContainer.innerHTML = `
+          <p>Image actuelle:</p>
+          <img src="uploads/${post.image}" style="max-width: 200px; display: block; margin-top: 5px;">
+          <button type="button" class="btn btn-outline" style="margin-top: 10px;" onclick="removePostImage('${post.id}')">Remove Image</button>
+        `;
+      } else {
+        imageContainer.innerHTML = '<p>Aucune image actuellement</p>';
+      }
+      
+      document.getElementById('edit-post-modal').style.display = 'block';
+    })
+    .catch(err => {
+      console.error('Erreur lors de l\'ouverture du modal d\'édition:', err);
+    });
+}
+
+  
+        function deleteCurrentPost() {
+            if (!confirm('Are you sure you want to delete this post?')) return;
+            const formData = new FormData();
+            formData.append('post_id', currentPostId);
+            fetch('backend/delete_post.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    showAlert('Post deleted successfully!', 'success');
+                    showForumTab('posts');
+                } else {
+                    showAlert('Error: ' + response.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Error deleting post:', err);
+            });
+        }
+  
+        function openEditModal(postId) {
+            fetch('backend/get_post_detail.php?post_id=' + postId)
+            .then(res => res.json())
+            .then(post => {
+                if (!post || !currentUser || post.userId !== currentUser.id) {
+                    showAlert('You can only edit your own posts', 'error');
+                    return;
+                }
+                document.getElementById('edit-post-title').value = post.title;
+                document.getElementById('edit-post-content').value = post.content;
+                const imageContainer = document.getElementById('current-image-container');
+                if (post.image) {
+                    imageContainer.innerHTML = `
+                        <p>Current image:</p>
+                        <img src="uploads/${post.image}" style="max-width: 200px; display: block; margin-top: 5px;">
+                        <button type="button" class="btn btn-outline" style="margin-top: 10px;" onclick="removePostImage('${post.id}')">Remove Image</button>
+                    `;
+                } else {
+                    imageContainer.innerHTML = '<p>No image currently</p>';
+                }
+                document.getElementById('edit-post-modal').style.display = 'block';
+            })
+            .catch(err => {
+                console.error('Error opening edit modal:', err);
+            });
+        }
+  
+        function closeModal() {
+            document.getElementById('edit-post-modal').style.display = 'none';
+        }
+  
+        function handleEditPost(e) {
+  e.preventDefault();
+  const title = document.getElementById('edit-post-title').value.trim();
+  const content = document.getElementById('edit-post-content').value.trim();
+  const imageInput = document.getElementById('edit-post-image');
+
+  const formData = new FormData();
+  formData.append('post_id', currentPostId);
+  formData.append('title', title);
+  formData.append('content', content);
+
+  // ✅ Ajouter une nouvelle image si sélectionnée
+  if (imageInput.files.length > 0) {
+    formData.append('image', imageInput.files[0]);
+  }
+
+  fetch('backend/update_post.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Post mis à jour !');
+      closeModal();
+      loadPosts();
+    } else {
+      alert('Erreur : ' + data.error);
+    }
+  });
+}
+
+  
+        function removePostImage(postId) {
+            // Simuler la suppression de l'image (vous pouvez créer un endpoint backend pour cela)
+            fetch('backend/remove_post_image.php', { // Endpoint à créer
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_id: postId })
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    openEditModal(postId);
+                } else {
+                    showAlert('Error: ' + response.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Error removing post image:', err);
+            });
+        }
+  
+        function votePost(postId, voteType) {
+            if (!currentUser) {
+                showAlert('Please login to vote', 'error');
+                showForumTab('auth');
+                return;
+            }
+            fetch('backend/vote.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ post_id: postId, vote_type: voteType })
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    loadPosts();
+                    if (document.getElementById('post-detail-view').style.display === 'block') {
+                        loadPostDetail(postId);
+                    }
+                } else {
+                    showAlert('Error: ' + response.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Error voting:', err);
+                showAlert('An unexpected error occurred', 'error');
+            });
+        }
+  
+        // Map Marker initialization (pour la carte dans "events")
+        function initMapMarkers() {
+            document.querySelectorAll('.map-marker').forEach(marker => {
+                marker.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                    this.style.zIndex = '3';
+                });
+                marker.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translate(-50%, -50%) scale(1)';
+                    this.style.zIndex = '2';
+                });
+            });
+        }
+        function loadForumStats() {
+  fetch('backend/get_forum_stats.php')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('stats-members').textContent = data.members;
+      document.getElementById('stats-posts').textContent = data.posts;
+      document.getElementById('stats-comments').textContent = data.comments;
+    })
+    .catch(err => {
+      console.error('Erreur lors du chargement des statistiques:', err);
+    });
+}
+function searchPosts() {
+  const searchInput = document.getElementById('search-keywords');
+  const query = searchInput.value.trim();
+  loadPosts(query); // On appelle loadPosts() en passant la requête
+}
+
+      </script>
+  </body>
+  </html>
+  
