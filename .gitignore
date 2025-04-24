@@ -1,5 +1,5 @@
 /sms/
 /vendor/
-.env
-composer.lock
-/config/twilio.php
+/.env/
+/composer.lock/
+/config/twilio.php/
