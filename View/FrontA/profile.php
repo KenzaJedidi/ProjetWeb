@@ -3,6 +3,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+function getSessionValue($key, $default = '') {
+    return isset($_SESSION['user'][$key]) ? $_SESSION['user'][$key] : $default;
+}
+
+function safeEcho($value) {
+    echo htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+}
+
 function getImageData($userId, $pdo) {
     try {
         $stmt = $pdo->prepare("SELECT profile_picture FROM user WHERE id_user = ?");
@@ -600,7 +608,7 @@ if (isset($_GET['updated'])) {
                     <div class="profile-sidebar">
                         <div class="user-avatar">
                             <label for="profile_picture_input" class="avatar-upload-label">
-                                <?php if (!empty($_SESSION['user']['profile_picture'])): ?>
+                                <?php if (isset($_SESSION['user']['profile_picture']) && $_SESSION['user']['profile_picture'] !== null): ?>
                                     <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($_SESSION['user']['profile_picture']); ?>" 
                                          alt="Profile" class="profile-image">
                                 <?php else: ?>
@@ -620,13 +628,17 @@ if (isset($_GET['updated'])) {
                                    onchange="submitProfilePicture(this);">
                         </div>
                         <div class="user-info">
-                            <h2 class="user-name"><?php echo htmlspecialchars($_SESSION['user']['nom'] . ' ' . htmlspecialchars($_SESSION['user']['prenom'])); ?></h2>
+                            <h2 class="user-name">
+                                <?php 
+                                $nom = isset($_SESSION['user']['nom']) ? $_SESSION['user']['nom'] : '';
+                                $prenom = isset($_SESSION['user']['prenom']) ? $_SESSION['user']['prenom'] : '';
+                                echo htmlspecialchars($nom . ' ' . $prenom); 
+                                ?>
+                            </h2>
                             <span class="user-role"><?php echo htmlspecialchars($_SESSION['user']['role']); ?></span>
                         </div>
                         <ul class="profile-menu">
                             <li class="active"><a href="profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
-                            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                            <li><a href="#"><i class="fas fa-lock"></i> Security</a></li>
                             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                         </ul>
                     </div>
@@ -639,25 +651,25 @@ if (isset($_GET['updated'])) {
                             <div class="form-group">
                                 <label class="form-label">First Name</label>
                                 <input type="text" name="nom" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['nom']); ?>" required>
+                                       value="<?php safeEcho(getSessionValue('nom')); ?>" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="form-label">Last Name</label>
                                 <input type="text" name="prenom" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['prenom']); ?>" required>
+                                       value="<?php safeEcho(getSessionValue('prenom')); ?>" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" name="email" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['email']); ?>" >
+                                       value="<?php safeEcho(getSessionValue('email')); ?>" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="form-label">Phone Number</label>
                                 <input type="tel" name="tel" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['tel']); ?>" required>
+                                       value="<?php safeEcho(getSessionValue('tel')); ?>" required>
                             </div>
                             
                             <div class="form-group">
