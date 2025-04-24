@@ -15,13 +15,12 @@ if (isset($_POST["phone"])) {
             $user = $userC->getUserByPhone($_POST["phone"]);
             if ($user) {
                 // Generate verification code
-                // $verificationCode = $userC->generateVerificationCode();
+                $verificationCode = $userC->generateVerificationCode();
                 
                 // Save the code in database
-                // if ($userC->saveVerificationCode($user->getIdUser(), $verificationCode)) {
-                if ($userC->saveVerificationCode($user->getIdUser(), 1234)) {
+                if ($userC->saveVerificationCode($user->getIdUser(), $verificationCode)) {
                     // Send SMS
-                    if ($smsService->sendVerificationCode($_POST["phone"], 1234)) {
+                    if ($smsService->sendVerificationCode($_POST["phone"], $verificationCode)) {
                         header('Location:code.php?id=' . $user->getIdUser());
                         exit();
                     } else {
