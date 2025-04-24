@@ -101,14 +101,21 @@ $userC = new userC();
 					<div class="header-top-right">
 						<ul>
 							<li class="header-top-contact">
-								+1 222 777 6565
-							</li>
-							<li class="header-top-contact">
     <?php if (empty($_SESSION['user'])) { ?>
         <a href="signin.php" class="btn">Log In | Sign Up</a>
     <?php } else { ?>
-        <a href="profile.php" class="btn"><?php echo htmlspecialchars($_SESSION['user']['nom'] . ' ' . htmlspecialchars($_SESSION['user']['prenom'])); ?></a>
-        <a href="logout.php">Log Out</a>
+        <a href="profile.php" class="btn">
+            <?php 
+            echo htmlspecialchars($_SESSION['user']['nom']);
+            if (isset($_SESSION['user']['prenom'])) {
+                echo ' ' . htmlspecialchars($_SESSION['user']['prenom']);
+            }
+            ?>
+        </a>
+        <?php if ($_SESSION['user']['role'] === 'admin') { ?>
+            <a href="back/index.php" class="btn">Admin Dashboard</a>
+        <?php } ?>
+        <a href="logout.php" class="btn">Log Out</a>
     <?php } ?>
 </li>
 

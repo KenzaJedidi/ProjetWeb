@@ -1,8 +1,24 @@
 <?php
 session_start();
-// Replace relative paths with absolute paths using __DIR__
+require_once(__DIR__ . '/../../vendor/autoload.php');
 include_once(__DIR__ . '/../../Model/user.php');
 include_once(__DIR__ . '/../../Controller/userC.php');
+
+// Initialize Google Client for front-end
+$google_config = require_once(__DIR__ . '/../../config/google-config.php');
+try {
+    $client = new Google\Client();
+    $client->setClientId($google_config['client_id']);
+    $client->setClientSecret($google_config['client_secret']);
+    $client->setRedirectUri($google_config['redirect_uri_front']);
+    $client->addScope('email');
+    $client->addScope('profile');
+
+    $google_login_url = $client->createAuthUrl();
+} catch (Exception $e) {
+    error_log("Google client setup error: " . $e->getMessage());
+    $google_login_url = '#';
+}
 
 $errorMessage = "";
 $userC = new userC();
@@ -16,17 +32,31 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                 'id' => $user->getIdUser(),
                 'email' => $user->getEmail(),
                 'nom' => $user->getNom(),
-                'prenom' => $user->getPrenom(),
+                'prenom' => $user->getPrenom() ?? '',
                 'tel' => $user->getTel(),
                 'role' => $user->getRole()
             ];
 
+            // For admin users, set both admin and user sessions
             if ($user->getRole() == "admin") {
-                header('Location: back/index.php');
+                $_SESSION['admin'] = [
+                    'id' => $user->getIdUser(),
+                    'nom' => $user->getNom(),
+                    'role' => 'admin'
+                ];
+                // Let admin choose where to go with a redirect menu
+                echo '<script>
+                    if(confirm("Would you like to go to the admin dashboard?")) {
+                        window.location.href = "back/index.php";
+                    } else {
+                        window.location.href = "index.php";
+                    }
+                </script>';
+                exit();
             } else {
                 header('Location: index.php');
+                exit();
             }
-            exit();
         } else {
             $errorMessage = 'Invalid email or password';
         }
@@ -57,6 +87,60 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     .input-error {
         border: 1px solid #FF4B2B !important;
     }
+
+    .social-container {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        color: #757575;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .google-btn:hover {
+        background-color: #f8f8f8;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .google-btn img {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+    }
+
+    .separator {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .separator::before,
+    .separator::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #ddd;
+        margin: 0 10px;
+    }
+
+    .separator span {
+        color: #757575;
+        padding: 0 10px;
+    }
 </style>
 
 <div class="container" id="container">
@@ -76,6 +160,17 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
             
             <a href="forgot.php">Forgot your password?</a>
             <button type="submit">Sign In</button>
+            
+            <!-- Add the Google Sign In button immediately after the form -->
+            <div class="social-container">
+                <div class="separator">
+                    <span>Or continue with</span>
+                </div>
+                <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="google-btn">
+                    <img src="assets/images/google.svg" alt="Google" />
+                    <span>Sign in with Google</span>
+                </a>
+            </div>
         </form>
     </div>
     <div class="overlay-container">

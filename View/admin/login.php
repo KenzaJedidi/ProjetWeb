@@ -1,6 +1,27 @@
 <?php
 session_start();
 include_once '../../Controller/userC.php';
+require_once '../../vendor/autoload.php';
+
+// Initialize Google Client
+$clientID = '376525179412-78ffmmmq31409kt53a2m9ouvleh128o8.apps.googleusercontent.com';
+$clientSecret = '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';
+$redirectUri = 'http://localhost/amal/View/admin/google-callback.php';
+try {
+    $client = new Google\Client();
+    $client->setClientId($clientID);
+    $client->setClientSecret($clientSecret);
+    $client->setRedirectUri($redirectUri);
+    $client->setAccessType('offline');
+    $client->setPrompt('consent');
+    $client->addScope('email');
+    $client->addScope('profile');
+
+    $authUrl = $client->createAuthUrl();
+} catch (Exception $e) {
+    error_log("Google client setup error: " . $e->getMessage());
+    $authUrl = '#';
+}
 
 $error = '';
 
@@ -58,6 +79,32 @@ if (isset($_POST['login'])) {
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-preset.css">
+    
+    <style>
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dee2e6;
+            margin: 0 1rem;
+        }
+        .separator-text {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        .btn-outline-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <!-- [ Pre-loader ] start -->
@@ -80,6 +127,14 @@ if (isset($_POST['login'])) {
                             <div class="text-center">
                                 <h4 class="mb-4">Admin Login</h4>
                             </div>
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <div class="alert alert-danger">
+                                    <?php 
+                                        echo htmlspecialchars($_SESSION['error']); 
+                                        unset($_SESSION['error']); 
+                                    ?>
+                                </div>
+                            <?php endif; ?>
                             <?php if ($error): ?>
                                 <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
                             <?php endif; ?>
@@ -99,6 +154,19 @@ if (isset($_POST['login'])) {
                                 <button type="submit" name="login" class="btn btn-primary">Login</button>
                             </div>
                         </form>
+                        
+                        <!-- Add Google Sign-In -->
+                        <div class="mt-4">
+                            <div class="separator">
+                                <span class="separator-text">Or</span>
+                            </div>
+                            <div class="d-grid mt-3">
+                                <a href="<?php echo htmlspecialchars($authUrl); ?>" class="btn btn-outline-secondary">
+                                    <img src="assets/images/google.svg" alt="Google" class="me-2" style="width: 18px;">
+                                    Sign in with Google
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -249,23 +249,26 @@ class userC {
 
     public function getUserByEmail($email) {
         try {
-            $query = "SELECT * FROM user WHERE email = :email LIMIT 1";
+            $query = "SELECT * FROM user WHERE email = :email";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute([':email' => $email]);
+            $stmt->execute(['email' => $email]);
             
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $row ? new User(
-                $row['id_user'],
-                $row['nom'],
-                $row['prenom'],
-                $row['email'],
-                $row['password'],
-                $row['role'],
-                $row['tel'],
-                $row['profile_picture']
-            ) : null;
-        } catch (PDOException $e) {
-            error_log("Error getting user by email: " . $e->getMessage());
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($userData) {
+                return new User(
+                    $userData['id_user'],
+                    $userData['nom'],
+                    $userData['prenom'],
+                    $userData['email'],
+                    $userData['password'],
+                    $userData['role'],
+                    $userData['tel']
+                );
+            }
+            return null;
+        } catch (Exception $e) {
+            error_log("Error in getUserByEmail: " . $e->getMessage());
             return null;
         }
     }
@@ -455,6 +458,105 @@ class userC {
         } catch (Exception $e) {
             error_log("Error in getFilteredUsers: " . $e->getMessage());
             return [];
+        }
+    }
+
+    public function isAdminEmail($email) {
+        try {
+            $query = "SELECT role FROM user WHERE email = :email AND role = 'admin'";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['email' => $email]);
+            return $stmt->rowCount() > 0;
+        } catch (Exception $e) {
+            error_log("Error checking admin status: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function addGoogleUser($email, $name, $role = 'user') {
+        try {
+            $names = explode(' ', $name);
+            $firstName = $names[0];
+            $lastName = isset($names[1]) ? $names[1] : '';
+            
+            $query = "INSERT INTO user (nom, prenom, email, password, role) 
+                     VALUES (:nom, :prenom, :email, :password, :role)";
+            
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute([
+                'nom' => $firstName,
+                'prenom' => $lastName,
+                'email' => $email,
+                'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT),
+                'role' => $role
+            ]);
+        } catch (Exception $e) {
+            error_log("Error adding Google user: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateUserRole($userId, $newRole) {
+        try {
+            $query = "UPDATE user SET role = :role WHERE id_user = :id";
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute([
+                'role' => $newRole,
+                'id' => $userId
+            ]);
+        } catch (Exception $e) {
+            error_log("Error updating user role: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function handleGoogleLogin($email, $name) {
+        try {
+            // Check if user exists
+            $user = $this->getUserByEmail($email);
+            
+            if (!$user) {
+                // Create new user with admin role if email is in allowed list
+                $google_config = require dirname(__DIR__) . '/config/google-config.php';
+                
+                if (!in_array($email, $google_config['allowed_admin_emails'])) {
+                    throw new Exception('Email not authorized for admin access');
+                }
+                
+                $names = explode(' ', $name);
+                $firstName = $names[0];
+                $lastName = isset($names[1]) ? $names[1] : '';
+                
+                $newUser = new User(
+                    null,
+                    $firstName,
+                    $lastName,
+                    $email,
+                    password_hash(bin2hex(random_bytes(32)), PASSWORD_DEFAULT),
+                    'admin',
+                    '',
+                    null,
+                    date('Y-m-d H:i:s')
+                );
+                
+                $userId = $this->addUser($newUser);
+                if (!$userId) {
+                    throw new Exception('Failed to create admin account');
+                }
+                
+                $user = $this->getUserById($userId);
+            }
+            
+            // Verify user is an admin
+            if ($user->getRole() !== 'admin') {
+                throw new Exception('Account does not have admin privileges');
+            }
+            
+            return $user;
+            
+        } catch (Exception $e) {
+            error_log("Google login error: " . $e->getMessage());
+            return null;
         }
     }
 }
