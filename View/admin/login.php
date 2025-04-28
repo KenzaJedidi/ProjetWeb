@@ -104,6 +104,15 @@ if (isset($_POST['login'])) {
             justify-content: center;
             gap: 0.5rem;
         }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +132,7 @@ if (isset($_POST['login'])) {
                         <div class="text-center">
                             <a href="#"><img src="assets/images/logo-dark.svg" alt="Logo" class="mb-4"></a>
                         </div>
-                        <form method="POST">
+                        <form method="POST" id="loginForm" novalidate>
                             <div class="text-center">
                                 <h4 class="mb-4">Admin Login</h4>
                             </div>
@@ -141,17 +150,19 @@ if (isset($_POST['login'])) {
                             <div class="form-group mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="ti ti-mail"></i></span>
-                                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Email">
                                 </div>
+                                <div class="error-message" id="email-error">Please enter a valid email address</div>
                             </div>
                             <div class="form-group mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="ti ti-lock"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                                 </div>
+                                <div class="error-message" id="password-error">Password must be at least 6 characters</div>
                             </div>
                             <div class="d-grid mt-4">
-                                <button type="submit" name="login" class="btn btn-primary">Login</button>
+                                <button type="submit" name="login" class="btn btn-primary" id="loginBtn">Login</button>
                             </div>
                         </form>
                         
@@ -178,5 +189,89 @@ if (isset($_POST['login'])) {
     <script src="assets/js/plugins/bootstrap.min.js"></script>
     <script src="assets/js/plugins/feather.min.js"></script>
     <script src="assets/js/pcoded.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Désactiver la validation HTML native
+            loginForm.setAttribute('novalidate', true);
+            
+            // Validation en temps réel
+            emailInput.addEventListener('input', validateEmail);
+            passwordInput.addEventListener('input', validatePassword);
+            
+            // Validation au focus out
+            emailInput.addEventListener('blur', validateEmail);
+            passwordInput.addEventListener('blur', validatePassword);
+            
+            // Validation à la soumission
+            loginForm.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    // Focus sur le premier champ invalide
+                    if (!validateEmail()) {
+                        emailInput.focus();
+                    } else if (!validatePassword()) {
+                        passwordInput.focus();
+                    }
+                }
+            });
+            
+            function validateEmail() {
+                const email = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email === '') {
+                    showError(emailInput, emailError, 'Email is required');
+                    return false;
+                } else if (!emailRegex.test(email)) {
+                    showError(emailInput, emailError, 'Please enter a valid email address');
+                    return false;
+                } else {
+                    hideError(emailInput, emailError);
+                    return true;
+                }
+            }
+            
+            function validatePassword() {
+                const password = passwordInput.value.trim();
+                
+                if (password === '') {
+                    showError(passwordInput, passwordError, 'Password is required');
+                    return false;
+                } else if (password.length < 6) {
+                    showError(passwordInput, passwordError, 'Password must be at least 6 characters');
+                    return false;
+                } else {
+                    hideError(passwordInput, passwordError);
+                    return true;
+                }
+            }
+            
+            function validateForm() {
+                const isEmailValid = validateEmail();
+                const isPasswordValid = validatePassword();
+                
+                return isEmailValid && isPasswordValid;
+            }
+            
+            function showError(input, errorElement, message) {
+                input.classList.add('is-invalid');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            function hideError(input, errorElement) {
+                input.classList.remove('is-invalid');
+                errorElement.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

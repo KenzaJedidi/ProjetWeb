@@ -1,5 +1,8 @@
 <?php
 session_start();
+$currentPage = 'add-user';
+$isSubPage = true;
+include '../includes/sidebar.php';
 include_once '../../../Controller/userC.php';
 include_once '../../../Model/user.php';
 
@@ -135,5 +138,142 @@ if (isset($_POST['submit'])) {
     </div>
 
     <?php include '../includes/scripts.php'; ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.needs-validation');
+        
+        // Regular expressions for validation
+        const patterns = {
+            name: /^[a-zA-ZÀ-ÿ\s'-]+$/,  // Lettres, espaces, tirets et apostrophes uniquement
+            email: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            phone: /^[0-9]{8}$/,
+            // Ajout du pattern pour le mot de passe
+            password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        };
+
+        // Messages d'erreur personnalisés
+        const errorMessages = {
+            password: 'Password must contain at least 8 characters, including uppercase, lowercase, number and special character',
+            role: 'Please select a role'
+        };
+
+        // Input event listeners for real-time validation
+        form.querySelectorAll('input[name="nom"], input[name="prenom"]').forEach(input => {
+            // Empêcher la saisie de chiffres
+            input.addEventListener('keypress', function(e) {
+                if (!patterns.name.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                    e.preventDefault();
+                }
+            });
+
+            // Validation lors de la saisie
+            input.addEventListener('input', function() {
+                validateField(this, patterns.name, 'This field should contain only letters');
+            });
+        });
+
+        // Email validation
+        const emailInput = form.querySelector('input[name="email"]');
+        emailInput.addEventListener('input', function() {
+            validateField(this, patterns.email, 'Please enter a valid email address');
+        });
+
+        // Phone number validation
+        const phoneInput = form.querySelector('input[name="tel"]');
+        phoneInput.addEventListener('input', function(e) {
+            // Limiter à 8 chiffres
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+            // Ne permettre que les chiffres
+            this.value = this.value.replace(/\D/g, '');
+            validateField(this, patterns.phone, 'Phone number must be exactly 8 digits');
+        });
+
+        // Password validation
+        const passwordInput = form.querySelector('input[name="password"]');
+        passwordInput.addEventListener('input', function() {
+            validateField(this, patterns.password, errorMessages.password);
+        });
+
+        // Role validation
+        const roleSelect = form.querySelector('select[name="role"]');
+        roleSelect.addEventListener('change', function() {
+            if (!this.value) {
+                showError(this, errorMessages.role);
+            } else {
+                clearError(this);
+            }
+        });
+
+        // Form submission validation
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+
+            // Validate all required fields
+            form.querySelectorAll('input[required], select[required]').forEach(field => {
+                if (field.name === 'nom' || field.name === 'prenom') {
+                    if (!patterns.name.test(field.value)) {
+                        isValid = false;
+                        showError(field, 'This field should contain only letters');
+                    }
+                } else if (field.name === 'email') {
+                    if (!patterns.email.test(field.value)) {
+                        isValid = false;
+                        showError(field, 'Please enter a valid email address');
+                    }
+                } else if (field.name === 'tel') {
+                    if (!patterns.phone.test(field.value)) {
+                        isValid = false;
+                        showError(field, 'Phone number must be exactly 8 digits');
+                    }
+                } else if (field.name === 'password') {
+                    if (!patterns.password.test(field.value)) {
+                        isValid = false;
+                        showError(field, errorMessages.password);
+                    }
+                } else if (field.name === 'role') {
+                    if (!field.value) {
+                        isValid = false;
+                        showError(field, errorMessages.role);
+                    }
+                } else if (!field.value.trim()) {
+                    isValid = false;
+                    showError(field, 'This field is required');
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        });
+
+        // Utility functions
+        function validateField(field, pattern, errorMessage) {
+            if (!pattern.test(field.value)) {
+                showError(field, errorMessage);
+                return false;
+            } else {
+                clearError(field);
+                return true;
+            }
+        }
+
+        function showError(field, message) {
+            field.classList.add('is-invalid');
+            field.classList.remove('is-valid');
+            const feedback = field.nextElementSibling;
+            if (feedback && feedback.classList.contains('invalid-feedback')) {
+                feedback.textContent = message;
+            }
+        }
+
+        function clearError(field) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+        }
+    });
+    </script>
 </body>
 </html>

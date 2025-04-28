@@ -1,5 +1,12 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 session_start();
+$currentPage = 'users-list';
+$isSubPage = true;
+include '../includes/sidebar.php';
 include_once '../../../Controller/userC.php';
 include_once '../../../Model/user.php';
 
@@ -24,6 +31,9 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
 <head>
     <title>Users List - Admin Dashboard</title>
     <?php include '../includes/head.php'; ?>
+    <!-- Add SweetAlert2 CSS and JS locally -->
+    <link rel="stylesheet" href="../assets/node_modules/sweetalert2/dist/sweetalert2.min.css">
+    <script src="../assets/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <style>
         .card {
             border: none;
@@ -81,6 +91,7 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
 
         .user-info {
             margin-left: 10px;
+            position: relative;
         }
 
         .user-name {
@@ -178,6 +189,73 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
             gap: 0.5rem !important;
         }
 
+        .user-banned {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .user-banned td {
+            color: #dc3545;
+        }
+
+        .badge-banned {
+            background-color: #dc3545;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .table tbody tr.banned-user {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .banned-user td {
+            color: #dc3545;
+        }
+
+        .banned-badge {
+            display: inline-block;
+            background-color: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        tr.banned-user {
+            position: relative;
+        }
+
+        tr.banned-user::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #dc3545;
+        }
+
+        .ban-toggle-btn {
+            transition: all 0.3s ease;
+        }
+
+        .ban-toggle-btn.btn-success {
+            background-color: #198754;
+        }
+
+        .ban-toggle-btn.btn-danger {
+            background-color: #dc3545;
+        }
+
+        .ban-toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
         @media (max-width: 768px) {
             .card-header {
                 flex-direction: column;
@@ -198,10 +276,31 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
                 max-width: 100%;
             }
         }
+
+        .banned-user {
+            background-color: rgba(220, 53, 69, 0.05) !important;
+        }
+
+        .banned-user td {
+            color: #dc3545;
+        }
+
+        .search-results-highlight {
+            background-color: rgba(70, 128, 255, 0.1);
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+
+        .search-no-results {
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body>
-    <?php include '../includes/sidebar.php'; ?>
+    <?php
+    include '../includes/sidebar.php';
+    ?>
     
     <div class="pc-container">
         <div class="pc-content">
@@ -228,9 +327,13 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
                                     <div class="col-md-4">
                                         <div class="search-box">
                                             <i class="ti ti-search search-icon"></i>
-                                            <input type="text" class="form-control" id="searchInput" 
-                                                   name="search" placeholder="Search users..." 
-                                                   value="<?php echo htmlspecialchars($searchTerm); ?>">
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="searchInput" 
+                                                   name="search" 
+                                                   placeholder="Search users..." 
+                                                   value="<?php echo htmlspecialchars($searchTerm); ?>"
+                                                   autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -270,20 +373,22 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
                                 <tbody>
                                     <?php if (!empty($users)): ?>
                                         <?php foreach ($users as $user): ?>
-                                            <tr>
+                                            <tr class="<?php echo $user->getIsBanned() ? 'banned-user' : ''; ?>" data-user-id="<?php echo $user->getIdUser(); ?>">
                                                 <td>
-                                                    <div class="d-flex align-items-center">
+                                                    <div class="d-flex align-items-center user-info">
                                                         <div class="avatar-sm">
                                                             <?php if ($user->getProfilePicture()): ?>
-                                                                <img src="data:image/jpeg;base64,<?php echo base64_encode($user->getProfilePicture()); ?>" 
-                                                                     alt="Profile">
+                                                                <img src="data:image/jpeg;base64,<?php echo base64_encode($user->getProfilePicture()); ?>" alt="Profile">
                                                             <?php else: ?>
                                                                 <?php echo strtoupper(substr($user->getNom(), 0, 1)); ?>
                                                             <?php endif; ?>
                                                         </div>
-                                                        <div class="user-info">
-                                                            <h6 class="user-name">
+                                                        <div class="ms-2">
+                                                            <h6 class="user-name mb-0">
                                                                 <?php echo htmlspecialchars($user->getNom() . ' ' . $user->getPrenom()); ?>
+                                                                <?php if ($user->getIsBanned()): ?>
+                                                                    <span class="banned-badge ms-2">Banned</span>
+                                                                <?php endif; ?>
                                                             </h6>
                                                         </div>
                                                     </div>
@@ -296,7 +401,13 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <div class="btn-group">
+                                                    <div class="d-flex gap-2">
+                                                        <button type="button" 
+                                                                class="btn <?php echo $user->getIsBanned() ? 'btn-success' : 'btn-danger'; ?> btn-sm ban-toggle-btn"
+                                                                onclick="toggleBanStatus(<?php echo $user->getIdUser(); ?>, '<?php echo htmlspecialchars($user->getNom()); ?>', <?php echo $user->getIsBanned() ? 'true' : 'false'; ?>)">
+                                                            <i class="ti <?php echo $user->getIsBanned() ? 'ti-user-check' : 'ti-user-x'; ?>"></i>
+                                                            <?php echo $user->getIsBanned() ? 'Unban' : 'Ban'; ?>
+                                                        </button>
                                                         <button type="button" class="btn btn-light" onclick="viewUser(<?php echo $user->getIdUser(); ?>)">
                                                             <i class="ti ti-eye"></i>
                                                         </button>
@@ -357,12 +468,171 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
             }
         }
 
+        function toggleBanStatus(userId, userName, isBanned) {
+            const action = isBanned ? 'unban' : 'ban';
+            
+            Swal.fire({
+                title: `${action.charAt(0).toUpperCase() + action.slice(1)} User?`,
+                html: `Are you sure you want to <strong>${action}</strong> ${userName}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: isBanned ? '#198754' : '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: `Yes, ${action}!`,
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('toggle-ban-user.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `userId=${userId}`
+                    })
+                    .then(response => {
+                        console.log('Response status:', response.status); // Log response status
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data); // Log response data
+                        if (data.success) {
+                            const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                            const banButton = row.querySelector('.ban-toggle-btn');
+                            const userName = row.querySelector('.user-name');
+                            
+                            // Update row and button states
+                            if (data.isBanned) {
+                                row.classList.add('banned-user');
+                                banButton.className = 'btn btn-success btn-sm ban-toggle-btn';
+                                banButton.innerHTML = '<i class="ti ti-user-check"></i> Unban';
+                                
+                                // Add banned badge if not exists
+                                if (!userName.querySelector('.banned-badge')) {
+                                    userName.insertAdjacentHTML('beforeend', 
+                                        '<span class="banned-badge ms-2">Banned</span>'
+                                    );
+                                }
+                            } else {
+                                row.classList.remove('banned-user');
+                                banButton.className = 'btn btn-danger btn-sm ban-toggle-btn';
+                                banButton.innerHTML = '<i class="ti ti-user-x"></i> Ban';
+                                
+                                // Remove banned badge
+                                const badge = userName.querySelector('.banned-badge');
+                                if (badge) badge.remove();
+                            }
+
+                            // Update button click handler
+                            banButton.setAttribute('onclick', 
+                                `toggleBanStatus(${userId}, '${userName.textContent.trim()}', ${!data.isBanned})`
+                            );
+
+                            Swal.fire({
+                                title: 'Success!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonColor: '#4680FF'
+                            });
+                        } else {
+                            console.error('Error response:', data); // Log error response
+                            throw new Error(data.message || 'Failed to update user status');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error); // Log error details
+                        Swal.fire({
+                            title: 'Error!',
+                            text: error.message || 'An error occurred while processing your request.',
+                            icon: 'error',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    });
+                }
+            });
+        }
+
         function resetFilters() {
             document.getElementById('searchInput').value = '';
             document.getElementById('roleFilter').value = '';
             document.getElementById('sortBy').value = 'name';
             document.getElementById('filterForm').submit();
         }
+
+        function initializeDynamicSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('table tbody tr');
+            
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                
+                // Add small delay to avoid too many searches while typing
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    let hasResults = false;
+
+                    tableRows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        const userName = row.querySelector('.user-name');
+                        const email = row.querySelector('td:nth-child(2)');
+                        const phone = row.querySelector('td:nth-child(3)');
+                        
+                        if (searchTerm === '') {
+                            // Reset everything if search is empty
+                            row.style.display = '';
+                            row.classList.remove('search-no-results');
+                            resetHighlight(userName);
+                            resetHighlight(email);
+                            resetHighlight(phone);
+                            hasResults = true;
+                        } else if (text.includes(searchTerm)) {
+                            // Show and highlight matching rows
+                            row.style.display = '';
+                            row.classList.remove('search-no-results');
+                            highlightText(userName, searchTerm);
+                            highlightText(email, searchTerm);
+                            highlightText(phone, searchTerm);
+                            hasResults = true;
+                        } else {
+                            // Hide non-matching rows
+                            row.style.display = 'none';
+                            row.classList.add('search-no-results');
+                        }
+                    });
+
+                    // Show/hide no results message
+                    const noResultsRow = document.querySelector('.no-results')?.closest('tr');
+                    if (noResultsRow) {
+                        noResultsRow.style.display = !hasResults ? '' : 'none';
+                    }
+                }, 200);
+            });
+        }
+
+        function highlightText(element, searchTerm) {
+            if (!element) return;
+            
+            const text = element.textContent;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            
+            // Keep existing classes and only replace text content
+            const existingClasses = element.className;
+            element.innerHTML = text.replace(regex, '<span class="search-results-highlight">$1</span>');
+            element.className = existingClasses;
+        }
+
+        function resetHighlight(element) {
+            if (!element) return;
+            
+            const text = element.textContent;
+            const existingClasses = element.className;
+            element.innerHTML = text;
+            element.className = existingClasses;
+        }
+
+        // Initialize the dynamic search when the document is ready
+        document.addEventListener('DOMContentLoaded', initializeDynamicSearch);
     </script>
 </body>
 </html>

@@ -651,25 +651,25 @@ if (isset($_GET['updated'])) {
                             <div class="form-group">
                                 <label class="form-label">First Name</label>
                                 <input type="text" name="nom" class="form-control" 
-                                       value="<?php safeEcho(getSessionValue('nom')); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['nom']) ? htmlspecialchars($_SESSION['user']['nom']) : ''; ?>">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Last Name</label>
                                 <input type="text" name="prenom" class="form-control" 
-                                       value="<?php safeEcho(getSessionValue('prenom')); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['prenom']) ? htmlspecialchars($_SESSION['user']['prenom']) : ''; ?>">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" name="email" class="form-control" 
-                                       value="<?php safeEcho(getSessionValue('email')); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : ''; ?>">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Phone Number</label>
                                 <input type="tel" name="tel" class="form-control" 
-                                       value="<?php safeEcho(getSessionValue('tel')); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['tel']) ? htmlspecialchars($_SESSION['user']['tel']) : ''; ?>">
                             </div>
                             
                             <div class="form-group">
@@ -780,15 +780,11 @@ if (isset($_GET['updated'])) {
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('profile-form');
 
-    // Fonction pour créer/mettre à jour le message d'erreur
     const showError = (input, message) => {
-        // Supprimer l'ancien message d'erreur s'il existe
         const existingError = input.parentElement.querySelector('.field-error');
         if (existingError) {
             existingError.remove();
         }
-
-        // Créer et ajouter le nouveau message d'erreur
         const errorDiv = document.createElement('div');
         errorDiv.className = 'field-error';
         errorDiv.textContent = message;
@@ -796,7 +792,6 @@ document.addEventListener('DOMContentLoaded', () => {
         input.classList.add('input-error');
     };
 
-    // Fonction pour supprimer le message d'erreur
     const removeError = (input) => {
         const existingError = input.parentElement.querySelector('.field-error');
         if (existingError) {
@@ -805,92 +800,76 @@ document.addEventListener('DOMContentLoaded', () => {
         input.classList.remove('input-error');
     };
 
-    // Validation en temps réel pour chaque champ
-    const validateField = (input, validationRules) => {
-        input.addEventListener('input', () => {
-            removeError(input);
-            const value = input.value.trim();
-            
-            if (validationRules.required && value === '') {
-                showError(input, validationRules.requiredMessage);
-                return false;
-            }
-            
-            if (validationRules.pattern && !validationRules.pattern.test(value)) {
-                showError(input, validationRules.patternMessage);
-                return false;
-            }
-            
-            return true;
-        });
-    };
+    const phoneInput = form.querySelector('[name="tel"]');
 
-    // Règles de validation pour chaque champ
-    const validationRules = {
-        nom: {
-            required: true,
-            requiredMessage: 'Le prénom est requis',
-            pattern: /^[a-zA-ZÀ-ÿ\s'-]{2,}$/,
-            patternMessage: 'Le prénom doit contenir au moins 2 caractères et uniquement des lettres'
-        },
-        prenom: {
-            required: true,
-            requiredMessage: 'Le nom est requis',
-            pattern: /^[a-zA-ZÀ-ÿ\s'-]{2,}$/,
-            patternMessage: 'Le nom doit contenir au moins 2 caractères et uniquement des lettres'
-        },
-        email: {
-            required: true,
-            requiredMessage: 'L\'email est requis',
-            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            patternMessage: 'Veuillez entrer une adresse email valide'
-        },
-        tel: {
-            required: true,
-            requiredMessage: 'Le numéro de téléphone est requis',
-            pattern: /^\d{8}$/,
-            patternMessage: 'Le numéro doit contenir exactement 8 chiffres'
-        },
-        password: {
-            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-            patternMessage: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial'
-        }
-    };
-
-    // Appliquer la validation à chaque champ
-    Object.keys(validationRules).forEach(fieldName => {
-        const input = form.querySelector(`[name="${fieldName}"]`);
-        if (input) {
-            validateField(input, validationRules[fieldName]);
+    // Ajouter un écouteur d'événement input pour la validation en temps réel
+    phoneInput.addEventListener('input', (e) => {
+        // Supprimer tous les caractères non numériques
+        e.target.value = e.target.value.replace(/\D/g, '');
+        
+        // Limiter à 8 chiffres
+        if (e.target.value.length > 8) {
+            e.target.value = e.target.value.slice(0, 8);
         }
     });
 
-    // Validation lors de la soumission du formulaire
     form.addEventListener('submit', (event) => {
+        event.preventDefault();
         let hasErrors = false;
         
-        Object.keys(validationRules).forEach(fieldName => {
-            const input = form.querySelector(`[name="${fieldName}"]`);
-            if (!input) return;
+        // Récupérer les valeurs
+        const nom = form.querySelector('[name="nom"]').value.trim();
+        const prenom = form.querySelector('[name="prenom"]').value.trim();
+        const email = form.querySelector('[name="email"]').value.trim();
+        const tel = form.querySelector('[name="tel"]').value.trim();
+        const password = form.querySelector('[name="password"]').value.trim();
 
-            removeError(input);
-            const value = input.value.trim();
-            const rules = validationRules[fieldName];
+        // Validation nom
+        if (nom === '') {
+            showError(form.querySelector('[name="nom"]'), 'Le prénom est requis');
+            hasErrors = true;
+        } else if (!/^[a-zA-ZÀ-ÿ\s'-]{2,}$/.test(nom)) {
+            showError(form.querySelector('[name="nom"]'), 'Le prénom doit contenir au moins 2 caractères et uniquement des lettres');
+            hasErrors = true;
+        }
 
-            if (rules.required && value === '') {
-                showError(input, rules.requiredMessage);
-                hasErrors = true;
-            } else if (rules.pattern && !rules.pattern.test(value)) {
-                // Pour le mot de passe, ne valider que s'il n'est pas vide
-                if (fieldName !== 'password' || value !== '') {
-                    showError(input, rules.patternMessage);
-                    hasErrors = true;
-                }
-            }
-        });
+        // Validation prenom
+        if (prenom === '') {
+            showError(form.querySelector('[name="prenom"]'), 'Le nom est requis');
+            hasErrors = true;
+        } else if (!/^[a-zA-ZÀ-ÿ\s'-]{2,}$/.test(prenom)) {
+            showError(form.querySelector('[name="prenom"]'), 'Le nom doit contenir au moins 2 caractères et uniquement des lettres');
+            hasErrors = true;
+        }
 
-        if (hasErrors) {
-            event.preventDefault();
+        // Validation email
+        if (email === '') {
+            showError(form.querySelector('[name="email"]'), 'L\'email est requis');
+            hasErrors = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError(form.querySelector('[name="email"]'), 'Veuillez entrer une adresse email valide');
+            hasErrors = true;
+        }
+
+        // Validation téléphone
+        if (tel === '') {
+            showError(form.querySelector('[name="tel"]'), 'Le numéro de téléphone est requis');
+            hasErrors = true;
+        } else if (!/^[0-9]{8}$/.test(tel)) {
+            showError(form.querySelector('[name="tel"]'), 'Le numéro de téléphone doit contenir exactement 8 chiffres');
+            hasErrors = true;
+        } else {
+            removeError(form.querySelector('[name="tel"]'));
+        }
+
+        // Validation mot de passe (uniquement si rempli)
+        if (password !== '' && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+            showError(form.querySelector('[name="password"]'), 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial');
+            hasErrors = true;
+        }
+
+        if (!hasErrors) {
+            form.submit();
         }
     });
 });

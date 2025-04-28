@@ -38,7 +38,6 @@ class userC {
             return false;
         }
     }
-
     public function listUsers() {
         try {
             $query = "SELECT * FROM user";
@@ -55,7 +54,9 @@ class userC {
                     $row['password'],
                     $row['role'],
                     $row['tel'],
-                    $row['profile_picture']
+                    $row['profile_picture'],
+                    $row['created_at'],
+                    (bool)$row['is_banned'] // Ensure boolean value
                 );
             }
             return $users;
@@ -80,7 +81,9 @@ class userC {
                 $row['password'],
                 $row['role'],
                 $row['tel'],
-                $row['profile_picture']
+                $row['profile_picture'],
+                $row['created_at'],
+                (bool)$row['is_banned'] // Ensure boolean value
             ) : null;
         } catch (PDOException $e) {
             error_log("Error getting user by ID: " . $e->getMessage());
@@ -162,11 +165,11 @@ class userC {
 
     public function verifyLogin($email, $password) {
         try {
-            $query = "SELECT * FROM user WHERE email = :email LIMIT 1";
+            $query = "SELECT * FROM user WHERE email = :email";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute([':email' => $email]);
+            $stmt->execute(['email' => $email]);
             
-            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if ($row = $stmt->fetch()) {
                 $user = new User(
                     $row['id_user'],
                     $row['nom'],
@@ -175,18 +178,23 @@ class userC {
                     $row['password'],
                     $row['role'],
                     $row['tel'],
-                    $row['profile_picture']
+                    $row['profile_picture'],
+                    $row['created_at'],
+                    $row['is_banned']
                 );
                 
+                if ($user->getIsBanned()) {
+                    return 'banned';
+                }
                 
-                if ($user->checkPassword($password)) {
+                if (password_verify($password, $user->getPassword())) {
                     return $user;
                 }
             }
-            return null;
+            return false;
         } catch (PDOException $e) {
-            error_log("Error verifying login: " . $e->getMessage());
-            return null;
+            error_log("Login verification error: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -557,6 +565,38 @@ class userC {
         } catch (Exception $e) {
             error_log("Google login error: " . $e->getMessage());
             return null;
+        }
+    }
+
+    public function toggleBanUser($userId) {
+        try {
+            // Get current ban status
+            $query = "SELECT is_banned FROM user WHERE id_user = :id";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([':id' => $userId]);
+            $currentStatus = $stmt->fetchColumn();
+
+            // Toggle the status
+            $newStatus = $currentStatus ? 0 : 1;
+            
+            $query = "UPDATE user SET is_banned = :status WHERE id_user = :id";
+            $stmt = $this->pdo->prepare($query);
+            $success = $stmt->execute([
+                ':status' => $newStatus,
+                ':id' => $userId
+            ]);
+
+            if ($success) {
+                return [
+                    'success' => true,
+                    'isBanned' => (bool)$newStatus,
+                    'message' => $newStatus ? 'User has been banned' : 'User has been unbanned'
+                ];
+            }
+            return ['success' => false, 'message' => 'Failed to update user status'];
+        } catch (PDOException $e) {
+            error_log("Error toggling ban status: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Database error occurred'];
         }
     }
 }

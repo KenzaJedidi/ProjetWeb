@@ -9,10 +9,11 @@ class User {
     private $tel;
     private $profile_picture;
     private $created_at; // Add this property
+    private $is_banned;
     
     public function __construct($id_user = null, $nom = null, $prenom = null, $email = null, 
                                 $password = null, $role = null, $tel = null, $profile_picture = null, 
-                                $created_at = null) {
+                                $created_at = null, $is_banned = false) {
         $this->id_user = $id_user;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -23,6 +24,7 @@ class User {
         $this->tel = $tel;
         $this->profile_picture = $profile_picture;
         $this->created_at = $created_at;
+        $this->is_banned = $is_banned;
     }
     
     // Getters
@@ -62,6 +64,10 @@ class User {
         return $this->created_at ?? date('Y-m-d H:i:s');
     }
     
+    public function getIsBanned() {
+        return !empty($this->is_banned);
+    }
+    
     // Setters
     public function setIdUser(int $id_user): void {
         $this->id_user = $id_user;
@@ -93,6 +99,10 @@ class User {
     
     public function setProfilePicture($profile_picture): void {
         $this->profile_picture = $profile_picture;
+    }
+    
+    public function setIsBanned($is_banned) {
+        $this->is_banned = $is_banned ? 1 : 0;
     }
     
     // Simple password check

@@ -112,6 +112,11 @@ $platformLabels = array_column($stats['platform_distribution'], 'platform');
 $platformData = array_column($stats['platform_distribution'], 'count');
 ?>
 
+<?php
+$currentPage = 'dashboard';
+?>
+<?php include 'includes/sidebar.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,6 +449,80 @@ $platformData = array_column($stats['platform_distribution'], 'count');
             border-radius: 50%;
             background: inherit;
         }
+
+        .pc-sidebar {
+            background: #ffffff !important;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .pc-navbar .pc-item {
+            position: relative;
+        }
+
+        .pc-navbar .pc-item .pc-link {
+            color: #344767;
+            padding: 12px 15px;
+            margin: 5px 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .pc-navbar .pc-item .pc-link:hover {
+            background: #f8f9fa;
+            color: #4680FF;
+        }
+
+        .pc-navbar .pc-item.active .pc-link {
+            background: #4680FF;
+            color: #ffffff;
+            box-shadow: 0 4px 8px rgba(70, 128, 255, 0.2);
+        }
+
+        .pc-navbar .pc-item.disabled .pc-link {
+            cursor: not-allowed;
+            background: #f8f9fa;
+        }
+
+        .pc-navbar .pc-item .pc-micon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: rgba(70, 128, 255, 0.1);
+        }
+
+        .pc-navbar .pc-item.active .pc-micon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .pc-item.pc-caption {
+            margin-top: 20px;
+            padding: 10px 15px;
+        }
+
+        .pc-item.pc-caption label {
+            color: #4680FF;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pc-item.pc-caption span {
+            color: #67748e;
+            font-size: 11px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .pc-navbar .pc-item.disabled .pc-micon {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
     </style>
 </head>
 
@@ -484,22 +563,49 @@ $platformData = array_column($stats['platform_distribution'], 'count');
                             <span class="pc-mtext">Dashboard</span>
                         </a>
                     </li>
+
                     <li class="pc-item">
-                        <a href="../admin/pages/usersList.php" class="pc-link">
+                        <a href="pages/usersList.php" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-users"></i></span>
                             <span class="pc-mtext">Users List</span>
                         </a>
                     </li>
+
                     <li class="pc-item">
                         <a href="pages/add-user.php" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
                             <span class="pc-mtext">Add User</span>
                         </a>
                     </li>
-                    <li class="pc-item">
-                        <a href="user-activity.php" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-activity"></i></span>
-                            <span class="pc-mtext">User Activity</span>
+
+                    <!-- Separator -->
+                    <li class="pc-item pc-caption">
+                        <label>Coming Soon</label>
+                        <span>New Features</span>
+                    </li>
+
+                    <!-- Nouveaux éléments désactivés -->
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
+                            <span class="pc-mtext">Events</span>
+                            <span class="pc-arrow"></span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-briefcase"></i></span>
+                            <span class="pc-mtext">Emploi</span>
+                            <span class="pc-arrow"></span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-bell"></i></span>
+                            <span class="pc-mtext">Notifications</span>
+                            <span class="pc-arrow"></span>
                         </a>
                     </li>
                 </ul>

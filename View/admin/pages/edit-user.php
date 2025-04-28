@@ -62,6 +62,7 @@ if (isset($_POST['submit'])) {
     <?php include '../includes/head.php'; ?>
 </head>
 <body>
+    <?php $currentPage = 'users-list'; $isSubPage = true; ?>
     <?php include '../includes/sidebar.php'; ?>
     
     <div class="pc-container">

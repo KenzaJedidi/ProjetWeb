@@ -25,9 +25,32 @@ $userC = new userC();
 
 if (isset($_POST["email"]) && isset($_POST["password"])) {
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
-        $user = $userC->verifyLogin($_POST["email"], $_POST["password"]);
-        
-        if ($user) {
+        $result = $userC->verifyLogin($_POST["email"], $_POST["password"]);
+
+        if ($result === 'banned') {
+            echo '<script>
+                Swal.fire({
+                    title: "Account Banned",
+                    html: `
+                        <div class="text-danger">
+                            <i class="ti ti-ban" style="font-size: 48px;"></i>
+                            <p class="mt-3">Your account has been banned by the administrator.</p>
+                            <p class="small">If you believe this is a mistake, please contact support.</p>
+                        </div>
+                    `,
+                    icon: "error",
+                    confirmButtonColor: "#dc3545",
+                    confirmButtonText: "OK",
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "index.php";
+                    }
+                });
+            </script>';
+            exit();
+        } elseif ($result) {
+            $user = $result;
             $_SESSION['user'] = [
                 'id' => $user->getIdUser(),
                 'email' => $user->getEmail(),
@@ -66,8 +89,14 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
 }
 ?>
 
-<link rel="stylesheet" href="css/css.css">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sign In</title>
+    <link rel="stylesheet" href="css/css.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 <style>
     .form-group {
         position: relative;
@@ -250,3 +279,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+</body>
+</html>
