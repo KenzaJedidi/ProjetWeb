@@ -51,56 +51,69 @@ $totalPages = ceil($totalOffres / $limit);
     <link rel="stylesheet" href="assets/css/style.css">
     <!--responsive.css-->
     <link rel="stylesheet" href="assets/css/responsive.css">
+    
+    <style>
+        /* Style supplémentaire pour les messages d'erreur */
+        .error-message {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        .form-control-file.is-invalid {
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        
+        /* Style pour tous les boutons d'emploi */
+        .emploi-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            width: auto;
+            min-width: 180px;
+            margin: 10px auto;
+            display: inline-block;
+            background-color: rgb(16, 196, 172);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .emploi-btn:hover {
+            background-color: rgb(13, 170, 150);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .emploi-btn:active {
+            transform: translateY(0);
+        }
+        
+        .emploi-offre {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .emploi-list {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <!--header-top start -->
-    <!--
-    <header id="header-top" class="header-top">
-        <ul>
-            <li>
-                <div class="header-top-left">
-                    <ul>
-                        <li class="select-opt">
-                            <select name="language" id="language">
-                                <option value="default">EN</option>
-                                <option value="Bangla">BN</option>
-                                <option value="Arabic">AB</option>
-                            </select>
-                        </li>
-                        <li class="select-opt">
-                            <select name="currency" id="currency">
-                                <option value="usd">USD</option>
-                                <option value="euro">Euro</option>
-                                <option value="bdt">BDT</option>
-                            </select>
-                        </li>
-                        <li class="select-opt">
-                            <a href="#"><span class="lnr lnr-magnifier"></span></a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="head-responsive-right pull-right">
-                <div class="header-top-right">
-                    <ul>
-                        <li class="header-top-contact">
-                            +1 222 777 6565
-                        </li>
-                        <li class="header-top-contact">
-                            <a href="#">sign in</a>
-                        </li>
-                        <li class="header-top-contact">
-                            <a href="#">register</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </header>
-    -->
-    <!--header-top end -->
-
     <!-- top-area Start -->
     <section class="top-area">
         <div class="header-area">
@@ -229,7 +242,7 @@ $totalPages = ceil($totalOffres / $limit);
         <div class="container">
             <div class="section-header">
                 <h2>OFFRES D'EMPLOI</h2>
-                <p>On recrute les talents qui osent réinventer les sorties en Tunisie – à vous de jouer ! ✨</p>
+                <p>On recrute les talents qui osent réinventer les sorties en Tunisie - à vous de jouer ! ✨</p>
             </div>
             
             <div class="emploi-content">
@@ -253,11 +266,13 @@ $totalPages = ceil($totalOffres / $limit);
                                         <li><i class="fa fa-check"></i> <?= htmlspecialchars($offre->getTypeContrat()) ?></li>
                                         <li><i class="fa fa-check"></i> Localisation: <?= htmlspecialchars($offre->getLocalisation() ?: 'Non spécifié') ?></li>
                                     </ul>
-                                    <button class="welcome-hero-btn emploi-btn postuler-btn" 
-                                            data-poste="<?= htmlspecialchars($offre->getTitre()) ?>" 
-                                            data-offre-id="<?= $offre->getId() ?>">
-                                        Postuler maintenant
-                                    </button>
+                                    <div class="text-center">
+                                        <button class="emploi-btn postuler-btn" 
+                                                data-poste="<?= htmlspecialchars($offre->getTitre()) ?>" 
+                                                data-offre-id="<?= $offre->getId() ?>">
+                                            Postuler maintenant
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -278,7 +293,7 @@ $totalPages = ceil($totalOffres / $limit);
                 </div>
 
                 <div class="text-center mt-4">
-                    <a href="candidature.html" class="welcome-hero-btn emploi-btn" style="background-color: #f8f9fa; color: #333; border: 1px solid #ddd; text-decoration: none; display: inline-block; max-width: 250px;">
+                    <a href="candidature.html" class="emploi-btn">
                         <i class="fa fa-eye"></i> Voir mes candidatures
                     </a>
                 </div>
@@ -300,23 +315,28 @@ $totalPages = ceil($totalOffres / $limit);
                     <form id="formCandidature" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="nomComplet">Nom Complet *</label>
-                            <input type="text" class="form-control" id="nomComplet" name="nom_complet" required>
+                            <input type="text" class="form-control" id="nomComplet" name="nom_complet">
+                            <small class="text-danger error-message" id="nomCompletError"></small>
                         </div>
                         <div class="form-group">
                             <label for="email">Email *</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="text" class="form-control" id="email" name="email">
+                            <small class="text-danger error-message" id="emailError"></small>
                         </div>
                         <div class="form-group">
                             <label for="telephone">Téléphone</label>
-                            <input type="tel" class="form-control" id="telephone" name="telephone">
+                            <input type="text" class="form-control" id="telephone" name="telephone">
+                            <small class="text-danger error-message" id="telephoneError"></small>
                         </div>
                         <div class="form-group">
                             <label for="cv">CV (PDF uniquement, max 2MB) *</label>
-                            <input type="file" class="form-control-file" id="cv" name="cv" accept=".pdf" required>
+                            <input type="file" class="form-control-file" id="cv" name="cv" accept=".pdf">
+                            <small class="text-danger error-message" id="cvError"></small>
                         </div>
                         <div class="form-group">
                             <label for="message">Message de motivation</label>
                             <textarea class="form-control" id="message" name="message" rows="5"></textarea>
+                            <small class="text-danger error-message" id="messageError"></small>
                         </div>
                         <input type="hidden" id="offreId" name="offre_id">
                         <input type="hidden" id="poste" name="poste">
@@ -344,42 +364,199 @@ $totalPages = ceil($totalOffres / $limit);
             $('#poste').val(poste);
             $('#offreId').val(offreId);
             $('#candidatureModal').modal('show');
+            
+            // Réinitialiser les messages d'erreur et les styles
+            $('.error-message').text('');
+            $('.form-control').removeClass('is-invalid');
+            $('.form-control-file').removeClass('is-invalid');
         });
         
+        // Fonctions de validation
+        function validateNomComplet(nom) {
+            if (!nom || nom.trim() === '') {
+                return "Le nom complet est requis";
+            }
+            if (nom.length < 3 || nom.length > 50) {
+                return "Le nom doit contenir entre 3 et 50 caractères";
+            }
+            if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(nom)) {
+                return "Le nom ne doit contenir que des lettres et espaces";
+            }
+            return "";
+        }
+
+        function validateEmail(email) {
+            if (!email || email.trim() === '') {
+                return "L'email est requis";
+            }
+            var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!re.test(email)) {
+                return "Veuillez entrer une adresse email valide";
+            }
+            return "";
+        }
+
+        function validateTelephone(telephone) {
+            if (telephone && telephone.trim() !== '') {
+                if (!/^[0-9]{8,15}$/.test(telephone)) {
+                    return "Le téléphone doit contenir 8 à 15 chiffres";
+                }
+            }
+            return "";
+        }
+
+        function validateCV(cvFile) {
+            if (!cvFile || !cvFile.name) {
+                return "Le CV est requis";
+            }
+            if (cvFile.size > 2097152) { // 2MB
+                return "Le fichier ne doit pas dépasser 2MB";
+            }
+            var extension = cvFile.name.split('.').pop().toLowerCase();
+            if (extension !== 'pdf') {
+                return "Seuls les fichiers PDF sont acceptés";
+            }
+            return "";
+        }
+
+        function validateMessage(message) {
+            if (message && message.length > 500) {
+                return "Le message ne doit pas dépasser 500 caractères";
+            }
+            return "";
+        }
+
+        // Validation en temps réel
+        $('#nomComplet').on('blur', function() {
+            var error = validateNomComplet($(this).val());
+            if (error) {
+                $(this).addClass('is-invalid');
+                $('#nomCompletError').text(error);
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#nomCompletError').text('');
+            }
+        });
+
+        $('#email').on('blur', function() {
+            var error = validateEmail($(this).val());
+            if (error) {
+                $(this).addClass('is-invalid');
+                $('#emailError').text(error);
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#emailError').text('');
+            }
+        });
+
+        $('#telephone').on('blur', function() {
+            var error = validateTelephone($(this).val());
+            if (error) {
+                $(this).addClass('is-invalid');
+                $('#telephoneError').text(error);
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#telephoneError').text('');
+            }
+        });
+
+        $('#cv').on('change', function() {
+            var error = validateCV(this.files[0]);
+            if (error) {
+                $(this).addClass('is-invalid');
+                $('#cvError').text(error);
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#cvError').text('');
+            }
+        });
+
+        $('#message').on('blur', function() {
+            var error = validateMessage($(this).val());
+            if (error) {
+                $(this).addClass('is-invalid');
+                $('#messageError').text(error);
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#messageError').text('');
+            }
+        });
+
         // Soumission du formulaire
         $('#formCandidature').submit(function(e) {
             e.preventDefault();
             
-            // Validation des champs
-            if ($('#nomComplet').val() === '' || $('#email').val() === '' || $('#cv').val() === '' || $('#offreId').val() === '') {
-                alert('Veuillez remplir tous les champs obligatoires');
-                return false;
-            }
+            // Réinitialiser les messages d'erreur
+            $('.error-message').text('');
+            $('.form-control').removeClass('is-invalid');
+            $('.form-control-file').removeClass('is-invalid');
             
-            // Validation du fichier
-            const fileInput = $('#cv')[0];
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                if (file.type !== 'application/pdf') {
-                    alert('Veuillez sélectionner un fichier PDF');
-                    return false;
-                }
-                if (file.size > 2097152) {
-                    alert('Le fichier ne doit pas dépasser 2MB');
-                    return false;
-                }
+            // Récupérer les valeurs
+            var nomComplet = $('#nomComplet').val();
+            var email = $('#email').val();
+            var telephone = $('#telephone').val();
+            var cvFile = $('#cv')[0].files[0];
+            var message = $('#message').val();
+            var isValid = true;
+
+            // Valider chaque champ
+            var nomError = validateNomComplet(nomComplet);
+            if (nomError) {
+                $('#nomComplet').addClass('is-invalid');
+                $('#nomCompletError').text(nomError);
+                isValid = false;
+            }
+
+            var emailError = validateEmail(email);
+            if (emailError) {
+                $('#email').addClass('is-invalid');
+                $('#emailError').text(emailError);
+                isValid = false;
+            }
+
+            var telephoneError = validateTelephone(telephone);
+            if (telephoneError) {
+                $('#telephone').addClass('is-invalid');
+                $('#telephoneError').text(telephoneError);
+                isValid = false;
+            }
+
+            var cvError = validateCV(cvFile);
+            if (cvError) {
+                $('#cv').addClass('is-invalid');
+                $('#cvError').text(cvError);
+                isValid = false;
+            }
+
+            var messageError = validateMessage(message);
+            if (messageError) {
+                $('#message').addClass('is-invalid');
+                $('#messageError').text(messageError);
+                isValid = false;
+            }
+
+            if (!isValid) {
+                // Faire défiler jusqu'au premier champ invalide
+                $('html, body').animate({
+                    scrollTop: $('.is-invalid').first().offset().top - 100
+                }, 500);
+                return false;
             }
             
             // Création FormData
             const formData = new FormData();
             formData.append('action', 'add');
-            formData.append('nom_complet', $('#nomComplet').val());
-            formData.append('email', $('#email').val());
-            formData.append('telephone', $('#telephone').val());
+            formData.append('nom_complet', nomComplet);
+            formData.append('email', email);
+            formData.append('telephone', telephone);
             formData.append('poste', $('#poste').val());
-            formData.append('message', $('#message').val());
+            formData.append('message', message);
             formData.append('offre_id', $('#offreId').val());
-            formData.append('cv', fileInput.files[0]);
+            formData.append('cv', cvFile);
+            
+            // Afficher un indicateur de chargement
+            var submitBtn = $('#formCandidature').find('button[type="submit"]');
+            submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Envoi en cours...');
             
             // Envoi au serveur
             $.ajax({
@@ -390,6 +567,8 @@ $totalPages = ceil($totalOffres / $limit);
                 contentType: false,
                 dataType: 'json',
                 success: function(response) {
+                    submitBtn.prop('disabled', false).text('Envoyer ma candidature');
+                    
                     if (response.success) {
                         alert('Candidature envoyée avec succès !');
                         $('#candidatureModal').modal('hide');
@@ -399,9 +578,9 @@ $totalPages = ceil($totalOffres / $limit);
                         const candidatures = JSON.parse(localStorage.getItem('candidaturesLocaloo')) || [];
                         candidatures.push({
                             poste: $('#poste').val(),
-                            nom: $('#nomComplet').val(),
-                            email: $('#email').val(),
-                            telephone: $('#telephone').val(),
+                            nom: nomComplet,
+                            email: email,
+                            telephone: telephone,
                             date: new Date().toLocaleDateString('fr-FR'),
                             status: 'En attente'
                         });
@@ -411,13 +590,13 @@ $totalPages = ceil($totalOffres / $limit);
                     }
                 },
                 error: function(xhr, status, error) {
+                    submitBtn.prop('disabled', false).text('Envoyer ma candidature');
                     alert('Une erreur est survenue : ' + error);
                 }
             });
         });
     });
     </script>
-    <!--emploi end -->
 
     <!--events start -->
     <section id="events" class="events">
@@ -486,6 +665,7 @@ $totalPages = ceil($totalOffres / $limit);
                 });
             });
         });
+
         </script>
     </section>
     <!--events end -->
@@ -618,193 +798,6 @@ $totalPages = ceil($totalOffres / $limit);
             </div>
         </div>
     </section>
-
-    <!-- Modal de confirmation -->
-    <div class="modal-confirm">
-        <div class="modal-content">
-            <h4>Confirmer la suppression</h4>
-            <p>Êtes-vous sûr de vouloir supprimer cette réservation ?</p>
-            <div class="modal-actions">
-                <button class="btn btn-cancel">Annuler</button>
-                <button class="btn btn-confirm">Supprimer</button>
-            </div>
-        </div>
-    </div>
-
-    <style>
-    /* Style de base pour la section réservation */
-    .reservation-section {
-        padding: 80px 0;
-        background: #f8fafb;
-    }
-
-    .section-header {
-        color: #505866;
-        font-size: 24px;
-        margin-bottom: 15px;
-    }
-
-    .filter-box {
-        background: white;
-        padding: 20px;
-        border-radius: 5px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    /* Cartes */
-    .reservation-form-card,
-    .reservation-list-card {
-        background: white;
-        border-radius: 5px;
-        padding: 25px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .reservation-form-card h3,
-    .reservation-list-card h3 {
-        color: #505866;
-        margin-bottom: 20px;
-        font-size: 18px;
-    }
-
-    /* Formulaire */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: #505866;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px 15px;
-        border: 1px solid #e1e5eb;
-        border-radius: 3px;
-    }
-
-    /* Liste des réservations */
-    .reservation-item {
-        display: flex;
-        padding: 15px;
-        border-bottom: 1px solid #f1f1f1;
-        align-items: center;
-    }
-
-    .reservation-info {
-        flex: 1;
-    }
-
-    .reservation-info h4 {
-        color: #505866;
-        margin-bottom: 5px;
-    }
-
-    .reservation-info p {
-        color: #767f86;
-        font-size: 13px;
-        margin-bottom: 5px;
-    }
-
-    .reservation-status {
-        padding: 5px 10px;
-        border-radius: 3px;
-        font-size: 12px;
-        margin: 0 15px;
-    }
-
-    .reservation-status.confirmed {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .reservation-status.pending {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .reservation-actions button {
-        background: none;
-        border: none;
-        color: #767f86;
-        cursor: pointer;
-    }
-
-    /* Boutons */
-    .btn {
-        padding: 10px 20px;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-    .btn-filter {
-        background: #81D8D0;
-        color: white;
-        border: none;
-        margin-top: 24px;
-        width: 100%;
-    }
-
-    .btn-submit {
-        background: #81D8D0;
-        color: white;
-        border: none;
-    }
-
-    .btn-cancel {
-        background: #f1f1f1;
-        color: #505866;
-        border: none;
-        margin-left: 10px;
-    }
-
-    /* Modal */
-    .modal-confirm {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-confirm .modal-content {
-        background: white;
-        padding: 20px;
-        border-radius: 5px;
-        max-width: 400px;
-        text-align: center;
-    }
-
-    .modal-actions {
-        margin-top: 20px;
-    }
-
-    .modal-actions .btn {
-        margin: 0 10px;
-    }
-    </style>
-
-    <script>
-    // Script pour la gestion des réservations
-    document.addEventListener('DOMContentLoaded', function() {
-        // Vérifier si flatpickr est chargé
-        if (typeof flatpickr !== 'undefined') {
-            flatpickr(".date-picker", {
-                dateFormat: "d/m/Y",
-                locale: "fr"
-            });
-        }
-    });
-    </script>
 
     <!-- statistics start -->
     <section id="statistics" class="statistics">

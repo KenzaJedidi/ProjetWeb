@@ -114,6 +114,18 @@ $offres = $controller->afficher();
       font-size: 0.9em;
       margin-bottom: 10px;
     }
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 0.875em;
+      display: none;
+    }
+    .was-validated .form-control:invalid ~ .invalid-feedback,
+    .form-control.is-invalid ~ .invalid-feedback {
+      display: block;
+    }
   </style>
 </head>
 
@@ -317,7 +329,7 @@ $offres = $controller->afficher();
                           </span>
                         </td>
                         <td class="align-middle text-center">
-                          <<button class="btn btn-custom btn-sm" data-bs-toggle="modal" data-bs-target="#offreModal"
+                          <button class="btn btn-custom btn-sm" data-bs-toggle="modal" data-bs-target="#offreModal"
                            onclick="fillEditForm(<?php echo $offre->getId(); ?>, '<?php echo addslashes($offre->getTitre()); ?>', '<?php echo addslashes($offre->getDescription()); ?>', '<?php echo addslashes($offre->getTypeContrat()); ?>', '<?php echo addslashes($offre->getSalaire()); ?>', '<?php echo addslashes($offre->getLocalisation()); ?>', '<?php echo addslashes($offre->getCompetences()); ?>', '<?php echo addslashes($offre->getStatus()); ?>')">Modifier</button>
 
                           <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
@@ -353,38 +365,68 @@ $offres = $controller->afficher();
             <?php if (!empty($error)): ?>
               <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
-            <form id="offreForm" method="POST">
+            <form id="offreForm" method="POST" class="needs-validation" novalidate>
               <input type="hidden" id="offre-id" name="id">
               <input type="hidden" id="offre-action" name="action" value="add">
+              
               <div class="mb-3">
-                <label for="titre" class="form-label">Poste</label>
-                <input type="text" class="form-control" id="titre" name="titre" required>
+                <label for="titre" class="form-label">Poste <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="titre" name="titre" required maxlength="100" pattern="[A-Za-zÀ-ÿ0-9\s\-]+" oninput="validateInput(this)">
+                <div class="invalid-feedback">
+                  Veuillez saisir un titre valide (100 caractères max, pas de caractères spéciaux).
+                </div>
               </div>
+              
               <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="description" name="description" rows="4" required minlength="20" maxlength="2000" oninput="validateInput(this)"></textarea>
+                <div class="invalid-feedback">
+                  La description doit contenir entre 20 et 2000 caractères.
+                </div>
               </div>
+              
               <div class="mb-3">
-                <label for="type_contrat" class="form-label">Type de contrat</label>
+                <label for="type_contrat" class="form-label">Type de contrat <span class="text-danger">*</span></label>
                 <select class="form-control" id="type_contrat" name="type_contrat" required>
+                  <option value="">Sélectionnez un type</option>
                   <option value="CDI">CDI</option>
                   <option value="CDD">CDD</option>
                   <option value="Saisonnier">Saisonnier</option>
                   <option value="Freelance">Freelance</option>
                 </select>
+                <div class="invalid-feedback">
+                  Veuillez sélectionner un type de contrat.
+                </div>
               </div>
+              
               <div class="mb-3">
                 <label for="salaire" class="form-label">Salaire</label>
-                <input type="text" class="form-control" id="salaire" name="salaire" placeholder="Ex: 1800-2200 DT">
+                <input type="text" class="form-control" id="salaire" name="salaire" placeholder="Ex: 1800-2200 DT" 
+                       pattern="[0-9\-\s]+" oninput="validateSalary(this)">
+                <div class="invalid-feedback">
+                  Format invalide. Exemples valides: "1800-2200 DT" ou "2500".
+                </div>
               </div>
+              
               <div class="mb-3">
                 <label for="localisation" class="form-label">Localisation</label>
-                <input type="text" class="form-control" id="localisation" name="localisation">
+                <input type="text" class="form-control" id="localisation" name="localisation" maxlength="100" 
+                       pattern="[A-Za-zÀ-ÿ\s\-,]+" oninput="validateInput(this)">
+                <div class="invalid-feedback">
+                  Veuillez saisir une localisation valide (100 caractères max).
+                </div>
               </div>
+              
               <div class="mb-3">
                 <label for="competences" class="form-label">Compétences</label>
-                <input type="text" class="form-control" id="competences" name="competences" placeholder="Ex: PHP, JavaScript, MySQL">
+                <input type="text" class="form-control" id="competences" name="competences" 
+                       placeholder="Ex: PHP, JavaScript, MySQL" maxlength="255" 
+                       pattern="[A-Za-zÀ-ÿ0-9\s\-,]+" oninput="validateInput(this)">
+                <div class="invalid-feedback">
+                  Veuillez saisir des compétences valides (255 caractères max).
+                </div>
               </div>
+              
               <div class="mb-3">
                 <label for="status" class="form-label">Statut</label>
                 <select class="form-control" id="status" name="status">
@@ -392,6 +434,7 @@ $offres = $controller->afficher();
                   <option value="Inactive">Inactive</option>
                 </select>
               </div>
+              
               <button type="submit" class="btn btn-custom">Enregistrer</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
             </form>
@@ -481,31 +524,89 @@ $offres = $controller->afficher();
     });
 
     // Remplir le formulaire pour modifier une offre
-  
-function fillEditForm(id, titre, description, typeContrat, salaire, localisation, competences, status) {
-  document.getElementById('offre-id').value = id;
-  document.getElementById('offre-action').value = 'edit';
-  document.getElementById('titre').value = titre;
-  document.getElementById('description').value = description;
-  document.getElementById('type_contrat').value = typeContrat;
-  document.getElementById('salaire').value = salaire;
-  document.getElementById('localisation').value = localisation;
-  document.getElementById('competences').value = competences;
-  document.getElementById('status').value = status;
-  
-  // Change the modal title
-  document.getElementById('offreModalLabel').innerText = 'Modifier une Offre d\'Emploi';
-}
+    function fillEditForm(id, titre, description, typeContrat, salaire, localisation, competences, status) {
+      document.getElementById('offre-id').value = id;
+      document.getElementById('offre-action').value = 'edit';
+      document.getElementById('titre').value = titre;
+      document.getElementById('description').value = description;
+      document.getElementById('type_contrat').value = typeContrat;
+      document.getElementById('salaire').value = salaire;
+      document.getElementById('localisation').value = localisation;
+      document.getElementById('competences').value = competences;
+      document.getElementById('status').value = status;
+      
+      // Change the modal title
+      document.getElementById('offreModalLabel').innerText = 'Modifier une Offre d\'Emploi';
+    }
 
+    function setDeleteId(id) {
+      document.getElementById('delete-id').value = id;
+    }
 
-
-function setDeleteId(id) {
-  document.getElementById('delete-id').value = id;
-}
-
-
-   
+    // Validation du formulaire
+    (function() {
+      'use strict';
+      
+      // Récupérer le formulaire
+      const form = document.getElementById('offreForm');
+      
+      // Empêcher la soumission si invalide
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        
+        form.classList.add('was-validated');
+      }, false);
+    })();
+    
+    // Fonction de validation générique
+    function validateInput(input) {
+      const pattern = new RegExp(input.pattern);
+      const isValid = pattern.test(input.value) && 
+                     (input.maxLength === -1 || input.value.length <= input.maxLength) &&
+                     (input.minLength === -1 || input.value.length >= input.minLength);
+      
+      if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+      } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+      }
+    }
+    
+    // Validation spécifique pour le salaire
+    function validateSalary(input) {
+      const salaryPattern = /^[0-9]+(\s*-\s*[0-9]+)?(\s*[A-Za-z]+)?$/;
+      const isValid = salaryPattern.test(input.value) || input.value === '';
+      
+      if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+      } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+      }
+    }
+    
+    // Réinitialiser le formulaire quand le modal est fermé
+    document.getElementById('offreModal').addEventListener('hidden.bs.modal', function() {
+      const form = document.getElementById('offreForm');
+      form.reset();
+      form.classList.remove('was-validated');
+      
+      // Réinitialiser les classes de validation
+      const inputs = form.querySelectorAll('.form-control');
+      inputs.forEach(input => {
+        input.classList.remove('is-valid', 'is-invalid');
+      });
+      
+      // Réinitialiser le titre du modal
+      document.getElementById('offreModalLabel').innerText = 'Ajouter une Offre d\'Emploi';
+      document.getElementById('offre-action').value = 'add';
+    });
   </script>
 </body>
-
 </html>

@@ -4,30 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Candidatures - Localoo</title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- CSS identique à front.php -->
+    <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/linearicons.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootsnav.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+    <!-- Style spécifique aux candidatures -->
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            padding-top: 20px;
-        }
         .mes-candidatures {
             padding: 60px 0;
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .section-header h2 {
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .section-header p {
-            color: #666;
-            font-size: 16px;
+            background-color: #f5f5f5;
         }
         .candidature-card {
             background: white;
@@ -124,6 +119,38 @@
     </style>
 </head>
 <body>
+    <!-- ========== EN-TÊTE MODIFIÉE ========== -->
+    <section class="top-area">
+        <div class="header-area">
+            <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="index.php">
+                            <img src="assets/images/logolocaloo.png" alt="Localoo Logo" class="navbar-logo">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                            <li class="scroll"><a href="front.php">home</a></li>
+                            <li class="scroll"><a href="front.php?scroll=explore">emploi</a></li>
+                            <li class="scroll"><a href="front.php">events</a></li>
+                            <li class="scroll"><a href="front.php">réservation</a></li>
+                            <li class="scroll"><a href="front.php">reclmation</a></li>
+                            <li class="scroll"><a href="front.php">forum</a></li>
+                            <li class="scroll"><a href="front.php">contact</a></li>
+                            <li class="scroll"><a href="front.php">my account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="clearfix"></div>
+    </section>
+
+    <!-- ========== SECTION CANDIDATURES ========== -->
     <section id="mes-candidatures" class="mes-candidatures">
         <div class="container">
             <div class="section-header">
@@ -137,7 +164,7 @@
                 </div>
                 
                 <div class="text-center mt-4">
-                    <a href="front.php" class="btn-retour">
+                    <a href="front.php?scroll=explore" class="btn-retour">
                         <i class="fa fa-arrow-left"></i> Retour aux offres
                     </a>
                 </div>
@@ -145,7 +172,7 @@
         </div>
     </section>
 
-    <!-- Modal Formulaire de Modification -->
+    <!-- ========== MODAL DE MODIFICATION ========== -->
     <div class="modal fade" id="modifierCandidatureModal" tabindex="-1" role="dialog" aria-labelledby="modifierCandidatureModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -190,12 +217,67 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    <!-- ========== PIED DE PAGE ========== -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-menu">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="index.php">local<span>oo</span></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul class="footer-menu-item">
+                            <li class="scroll"><a href="front.php">how it works</a></li>
+                            <li class="scroll"><a href="front.php?scroll=explore">explore</a></li>
+                            <li class="scroll"><a href="front.php">réservation</a></li>
+                            <li class="scroll"><a href="front.php">blog</a></li>
+                            <li class="scroll"><a href="front.php">contact</a></li>
+                            <li class="scroll"><a href="front.php">my account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="hm-footer-copyright">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <p>©copyright. designed and developed by <a href="https://www.themesine.com/">themesine</a></p>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="footer-social">
+                            <span><i class="fa fa-phone"> +1 (222) 777 8888</i></span>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-google-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="scroll-Top">
+            <div class="return-to-top">
+                <i class="fa fa-angle-up" id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootsnav.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <!-- ========== SCRIPT DE GESTION DES CANDIDATURES ========== -->
     <script>
     $(document).ready(function() {
-        // Charger les candidatures depuis le serveur
         function chargerCandidatures() {
             $.ajax({
                 url: '../../controllers/CandidatureController.php?action=getCandidatures',
@@ -260,10 +342,8 @@
             });
         }
         
-        // Charger les candidatures au démarrage
         chargerCandidatures();
         
-        // Gestion de la suppression
         $(document).on('click', '.supprimer-candidature', function() {
             const id = $(this).data('id');
             if (confirm('Voulez-vous vraiment supprimer cette candidature ?')) {
@@ -290,10 +370,8 @@
             }
         });
         
-        // Gestion de la modification
         $(document).on('click', '.modifier-candidature', function() {
             const id = $(this).data('id');
-            console.log('ID candidature cliqué :', id);
             
             $.ajax({
                 url: '../../controllers/CandidatureController.php?action=getCandidature&id=' + id,
@@ -301,15 +379,12 @@
                 dataType: 'json',
                 success: function(response) {
                     if (!response.success || !response.candidature) {
-                        console.error('Aucune candidature trouvée pour l\'ID :', id);
                         alert('Erreur : Candidature non trouvée.');
                         return;
                     }
                     
                     const candidature = response.candidature;
-                    console.log('Données de la candidature :', candidature);
                     
-                    // Pré-remplir le formulaire
                     $('#modifierCandidatureId').val(candidature.id || '');
                     $('#modifierOffreId').val(candidature.offre_id || '');
                     $('#modifierPoste').val(candidature.poste || '');
@@ -318,38 +393,22 @@
                     $('#modifierTelephone').val(candidature.telephone || '');
                     $('#modifierMessage').val(candidature.message || '');
                     
-                    // Vérifier les valeurs assignées
-                    console.log('Valeurs assignées au formulaire :', {
-                        candidature_id: $('#modifierCandidatureId').val(),
-                        offre_id: $('#modifierOffreId').val(),
-                        poste: $('#modifierPoste').val(),
-                        nom_complet: $('#modifierNomComplet').val(),
-                        email: $('#modifierEmail').val(),
-                        telephone: $('#modifierTelephone').val(),
-                        message: $('#modifierMessage').val()
-                    });
-                    
-                    // Afficher le modal
                     $('#modifierCandidatureModal').modal('show');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Erreur lors de la récupération de la candidature :', error);
                     alert('Erreur serveur : Impossible de charger la candidature.');
                 }
             });
         });
         
-        // Soumission du formulaire de modification
         $('#formModifierCandidature').submit(function(e) {
             e.preventDefault();
             
-            // Validation des champs
             if ($('#modifierNomComplet').val() === '' || $('#modifierEmail').val() === '' || $('#modifierOffreId').val() === '') {
                 alert('Veuillez remplir tous les champs obligatoires');
                 return false;
             }
             
-            // Validation du fichier (si fourni)
             const fileInput = $('#modifierCv')[0];
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
@@ -363,7 +422,6 @@
                 }
             }
             
-            // Envoi au serveur
             const formData = new FormData();
             formData.append('action', 'update');
             formData.append('candidature_id', $('#modifierCandidatureId').val());
@@ -398,6 +456,19 @@
                     alert('Erreur serveur : ' + error);
                 }
             });
+        });
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('#scroll-Top').addClass('active');
+            } else {
+                $('#scroll-Top').removeClass('active');
+            }
+        });
+        
+        $('#scroll-Top').on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop: 0}, '300');
         });
     });
     </script>
