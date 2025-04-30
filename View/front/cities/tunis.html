@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Événements à Tunis - Tourism Tunisia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Nouvelle palette colorée */
+        :root {
+            --coral: #FF6B6B;
+            --tiffany: #0ABAB5;
+            --gold: #FFD700;
+            --lavande: #A58FAA;
+            --citron: #E8F48C;
+        }
+
+        .events-grid {
+            display: grid;
+            gap: 2rem;
+            padding: 4rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .event-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            min-height: 400px;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            z-index: 0;
+        }
+
+        .event-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(10,186,181,0.8), rgba(255,107,107,0.6));
+            z-index: 1;
+        }
+
+        .event-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .event-tag {
+            background: var(--gold);
+            color: #2c2c2c;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .event-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .event-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: var(--coral);
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .event-link:hover {
+            background: var(--tiffany);
+            transform: scale(1.05);
+        }
+
+        /* Couleurs différentes pour chaque catégorie */
+        .event-card[data-category="culture"] .event-gradient {
+            background: linear-gradient(45deg, rgba(165,143,170,0.8), rgba(106,76,147,0.6));
+        }
+
+        .event-card[data-category="musique"] .event-gradient {
+            background: linear-gradient(45deg, rgba(255,107,107,0.8), rgba(255,180,67,0.6));
+        }
+
+        .event-card[data-category="gastronomie"] .event-gradient {
+            background: linear-gradient(45deg, rgba(232,244,140,0.8), rgba(255,140,0,0.6));
+        }
+    </style>
+</head>
+<body>
+    <section class="city-events">
+        <div class="container">
+            <h1 class="main-title"><br>Événements à Tunis 🌟</h1>
+            
+            <div class="events-grid">
+                <!-- Festival de Carthage -->
+                <article class="event-card" data-category="culture">
+                    <img src="C:/web/app/views/front/assets/images/festivalcarthage.jpg" 
+                         alt="Festival de Carthage" 
+                         class="event-image"
+                         loading="lazy">
+                    <div class="event-gradient"></div>
+                    <div class="event-content">
+                        <span class="event-tag">Patrimoine Culturel</span>
+                        <h2 class="event-title">Festival International de Carthage</h2>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-day"></i>
+                                5-20 Juillet 2024
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-ticket"></i>
+                                À partir de 50 TND
+                            </div>
+                        </div>
+                        <a href="#" class="event-link">
+                            Réserver maintenant <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Festival Jazz -->
+                <article class="event-card" data-category="musique">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f" 
+                         alt="Festival de Jazz" 
+                         class="event-image"
+                         loading="lazy">
+                    <div class="event-gradient"></div>
+                    <div class="event-content">
+                        <span class="event-tag" style="background: var(--lavande)">Musique Live</span>
+                        <h2 class="event-title">Nuits Jazz en Méditerranée</h2>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-music"></i>
+                                10 Artistes Internationaux
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-wine-glass-alt"></i>
+                                Bar à Cocktails
+                            </div>
+                        </div>
+                        <a href="#" class="event-link" style="background: var(--lavande)">
+                            Voir programme <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Festival Culinaire -->
+                <article class="event-card" data-category="gastronomie">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1" 
+                         alt="Festival Culinaire" 
+                         class="event-image"
+                         loading="lazy">
+                    <div class="event-gradient"></div>
+                    <div class="event-content">
+                        <span class="event-tag" style="background: var(--citron)">Aventure Gourmande</span>
+                        <h2 class="event-title">Saveurs de Tunisie</h2>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-utensils"></i>
+                                30 Chefs Étoilés
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                18h - Minuit
+                            </div>
+                        </div>
+                        <a href="#" class="event-link" style="background: var(--citron); color: #2c2c2c;">
+                            Découvrir <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
