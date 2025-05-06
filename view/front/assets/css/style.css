@@ -41,6 +41,17 @@ body {
     margin: 0 auto;
     overflow-x: hidden;
 }
+.speech-input-group {
+    position: relative;
+}
+#speech-status, #speech-status-modifier {
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+.btn-outline-primary .fa-microphone,
+.btn-outline-danger .fa-stop {
+    margin-right: 5px;
+}
 
 a, a:hover, a:active, a:focus {
     display: inline-block;

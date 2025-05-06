@@ -144,6 +144,51 @@ class CandidatureController
         return $candidatures;
     }
 
+    // Récupérer les candidatures par offre_id
+    public function getCandidaturesByOffreId($offre_id)
+    {
+        $sql = "SELECT * FROM candidatures WHERE offre_id = :offre_id";
+        $db = config::getConnexion();
+        $query = $db->prepare($sql);
+        $query->execute(['offre_id' => $offre_id]);
+        $candidatures = [];
+        while ($row = $query->fetch()) {
+            $candidature = new Candidature(
+                $row['nom_complet'],
+                $row['email'],
+                $row['telephone'],
+                $row['poste'],
+                $row['cv_path'],
+                $row['message'],
+                $row['status']
+            );
+            $candidature->setId($row['id']);
+            $candidature->setOffre_id($row['offre_id']);
+            $candidature->setDatePostulation($row['date_postulation']);
+            $candidatures[] = $candidature;
+        }
+        return $candidatures;
+    }
+
+    // Récupérer les candidatures récentes pour les notifications
+    public function getRecentCandidatures()
+    {
+        $sql = "SELECT id, nom_complet, email, telephone, poste, status, date_postulation 
+                FROM candidatures 
+                WHERE status = 'En attente' 
+                OR date_postulation >= NOW() - INTERVAL 24 HOUR 
+                ORDER BY date_postulation DESC 
+                LIMIT 10";
+        $db = config::getConnexion();
+        $query = $db->prepare($sql);
+        $query->execute();
+        $candidatures = [];
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $candidatures[] = $row;
+        }
+        return ['success' => true, 'candidatures' => $candidatures];
+    }
+
     public function add()
     {
         header('Content-Type: application/json');
@@ -358,6 +403,49 @@ class CandidatureController
         }
     }
 
+    // Mettre à jour le statut d'une candidature
+    public function updateStatus()
+    {
+        header('Content-Type: application/json');
+
+        if ($_POST['action'] !== 'updateStatus') {
+            echo json_encode(['success' => false, 'message' => 'Action invalide']);
+            return;
+        }
+
+        $candidature_id = $_POST['candidature_id'] ?? '';
+        $status = $_POST['status'] ?? '';
+
+        if (empty($candidature_id) || empty($status)) {
+            echo json_encode(['success' => false, 'message' => 'ID de candidature et statut requis']);
+            return;
+        }
+
+        // Validation du statut
+        if (!in_array($status, ['En attente', 'En cours', 'Accepté', 'Rejeté'])) {
+            echo json_encode(['success' => false, 'message' => 'Statut invalide']);
+            return;
+        }
+
+        try {
+            $sql = "UPDATE candidatures SET status = :status WHERE id = :id";
+            $db = config::getConnexion();
+            $query = $db->prepare($sql);
+            $query->execute([
+                'status' => $status,
+                'id' => $candidature_id
+            ]);
+
+            if ($query->rowCount() > 0) {
+                echo json_encode(['success' => true, 'message' => 'Statut mis à jour avec succès']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Aucune candidature trouvée pour cet ID']);
+            }
+        } catch (PDOException $e) {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour : ' . $e->getMessage()]);
+        }
+    }
+
     // Récupérer toutes les candidatures en JSON
     public function getCandidatures()
     {
@@ -411,6 +499,34 @@ class CandidatureController
             echo json_encode(['success' => false, 'message' => 'Candidature non trouvée']);
         }
     }
+
+    // Récupérer les candidatures par offre_id en JSON
+    public function getCandidaturesByOffre()
+    {
+        header('Content-Type: application/json');
+        $offre_id = $_GET['offre_id'] ?? '';
+        if (empty($offre_id)) {
+            echo json_encode(['success' => false, 'message' => 'ID de l\'offre requis']);
+            return;
+        }
+        $candidatures = $this->getCandidaturesByOffreId($offre_id);
+        $result = [];
+        foreach ($candidatures as $candidature) {
+            $result[] = [
+                'id' => $candidature->getId(),
+                'nom_complet' => $candidature->getNomComplet(),
+                'email' => $candidature->getEmail(),
+                'telephone' => $candidature->getTelephone(),
+                'poste' => $candidature->getPoste(),
+                'cv_path' => $candidature->getCvPath(),
+                'message' => $candidature->getMessage(),
+                'status' => $candidature->getStatus(),
+                'date_postulation' => $candidature->getDatePostulation(),
+                'offre_id' => $candidature->getOffre_id()
+            ];
+        }
+        echo json_encode(['success' => true, 'candidatures' => $result]);
+    }
 }
 
 // Gestion de la requête
@@ -422,6 +538,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $controller->update();
     } elseif ($_POST['action'] === 'delete') {
         $controller->delete();
+    } elseif ($_POST['action'] === 'updateStatus') {
+        $controller->updateStatus();
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $controller = new CandidatureController();
@@ -429,6 +547,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $controller->getCandidatures();
     } elseif (isset($_GET['action']) && $_GET['action'] === 'getCandidature') {
         $controller->getCandidature();
+    } elseif (isset($_GET['action']) && $_GET['action'] === 'getCandidaturesByOffre') {
+        $controller->getCandidaturesByOffre();
+    } elseif (isset($_GET['action']) && $_GET['action'] === 'getRecentCandidatures') {
+        echo json_encode($controller->getRecentCandidatures());
     }
 }
 ?>

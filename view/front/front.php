@@ -31,7 +31,7 @@ $totalPages = ceil($totalOffres / $limit);
     
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
-
+    <link rel="stylesheet" href="assets/css/speech-input.css">
     <!--font-awesome.min.css-->
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <!--linear icon css-->
@@ -333,11 +333,14 @@ $totalPages = ceil($totalOffres / $limit);
                             <input type="file" class="form-control-file" id="cv" name="cv" accept=".pdf">
                             <small class="text-danger error-message" id="cvError"></small>
                         </div>
-                        <div class="form-group">
-                            <label for="message">Message de motivation</label>
-                            <textarea class="form-control" id="message" name="message" rows="5"></textarea>
-                            <small class="text-danger error-message" id="messageError"></small>
-                        </div>
+                        <div class="form-group speech-input-group">
+    <label for="message">Lettre de motivation</label>
+    <textarea class="form-control" id="message" name="message" rows="5"></textarea>
+    <button type="button" id="start-speech" class="btn btn-outline-primary mt-2">
+        <i class="fa fa-microphone"></i> Enregistrer un message vocal
+    </button>
+    <span id="speech-status" class="text-muted ml-2"></span>
+</div>
                         <input type="hidden" id="offreId" name="offre_id">
                         <input type="hidden" id="poste" name="poste">
                         <div class="form-group text-center">
@@ -946,5 +949,7 @@ $totalPages = ceil($totalOffres / $limit);
     <script src="assets/js/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script src="assets/js/speech-to-text.js"></script>
+
 </body>
 </html>

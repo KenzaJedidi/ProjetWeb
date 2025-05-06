@@ -126,6 +126,38 @@ $offres = $controller->afficher();
     .form-control.is-invalid ~ .invalid-feedback {
       display: block;
     }
+    .status-select {
+      width: 120px;
+    }
+    .badge-status {
+      padding: 0.5em 1em;
+      border-radius: 0.25rem;
+    }
+    .badge-status.en-attente {
+      background-color: #ffc107;
+      color: #000;
+    }
+    .badge-status.en-cours {
+      background-color: #17a2b8;
+      color: #fff;
+    }
+    .badge-status.accepté {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .badge-status.rejeté {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    /* Style pour le badge de notification */
+    #notification-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      display: none;
+    }
   </style>
 </head>
 
@@ -237,9 +269,10 @@ $offres = $controller->afficher();
             <li class="nav-item dropdown pe-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="material-symbols-rounded">notifications</i>
+                <span class="badge badge-sm bg-gradient-primary" id="notification-count"></span>
               </a>
-              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 ms-n5" aria-labelledby="dropdownMenuButton">
-                <li class="mb-2"><a class="dropdown-item border-radius-md" href="javascript:;">Aucune notification</a></li>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 ms-n5" aria-labelledby="dropdownMenuButton" id="notification-list">
+                <!-- Les notifications seront chargées ici -->
               </ul>
             </li>
             <li class="nav-item d-flex align-items-center">
@@ -331,9 +364,13 @@ $offres = $controller->afficher();
                         <td class="align-middle text-center">
                           <button class="btn btn-custom btn-sm" data-bs-toggle="modal" data-bs-target="#offreModal"
                            onclick="fillEditForm(<?php echo $offre->getId(); ?>, '<?php echo addslashes($offre->getTitre()); ?>', '<?php echo addslashes($offre->getDescription()); ?>', '<?php echo addslashes($offre->getTypeContrat()); ?>', '<?php echo addslashes($offre->getSalaire()); ?>', '<?php echo addslashes($offre->getLocalisation()); ?>', '<?php echo addslashes($offre->getCompetences()); ?>', '<?php echo addslashes($offre->getStatus()); ?>')">Modifier</button>
-
                           <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             onclick="setDeleteId(<?php echo $offre->getId(); ?>)">Supprimer</button>
+                          <button class="btn btn-info btn-sm view-candidates" 
+                                  data-offre-id="<?php echo $offre->getId(); ?>"
+                                  data-offre-titre="<?php echo htmlspecialchars($offre->getTitre()); ?>">
+                              <i class="material-symbols-rounded">people</i> Candidats
+                          </button>
                         </td>
                       </tr>
                     <?php endforeach; ?>
@@ -461,6 +498,65 @@ $offres = $controller->afficher();
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
               <button type="submit" class="btn btn-danger">Supprimer</button>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal pour afficher les candidats -->
+    <div class="modal fade" id="candidatesModal" tabindex="-1" aria-labelledby="candidatesModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="candidatesModalLabel">Candidats pour l'offre: <span id="offreTitre"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom Complet</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Téléphone</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Statut</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="candidatesList">
+                  <!-- Les candidats seront chargés ici -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal pour afficher les détails d'un candidat -->
+    <div class="modal fade" id="candidateDetailsModal" tabindex="-1" aria-labelledby="candidateDetailsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="candidateDetailsModalLabel">Détails du Candidat</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>ID:</strong> <span id="detail-id"></span></p>
+            <p><strong>Nom Complet:</strong> <span id="detail-nom"></span></p>
+            <p><strong>Email:</strong> <span id="detail-email"></span></p>
+            <p><strong>Téléphone:</strong> <span id="detail-telephone"></span></p>
+            <p><strong>Date de Postulation:</strong> <span id="detail-date"></span></p>
+            <p><strong>Statut:</strong> <span id="detail-status"></span></p>
+            <p><strong>CV:</strong> <a id="detail-cv" href="#" target="_blank">Voir CV</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
           </div>
         </div>
       </div>
@@ -607,6 +703,209 @@ $offres = $controller->afficher();
       document.getElementById('offreModalLabel').innerText = 'Ajouter une Offre d\'Emploi';
       document.getElementById('offre-action').value = 'add';
     });
+
+    // Charger les notifications basées sur les candidatures récentes
+    function loadNotifications() {
+      fetch('../../../controllers/CandidatureController.php?action=getRecentCandidatures')
+        .then(response => response.json())
+        .then(data => {
+          const notificationList = document.getElementById('notification-list');
+          const notificationCount = document.getElementById('notification-count');
+          notificationList.innerHTML = '';
+
+          if (data.success && data.candidatures.length > 0) {
+            notificationCount.textContent = data.candidatures.length;
+            notificationCount.style.display = 'inline-block';
+            
+            data.candidatures.forEach(candidature => {
+              const li = document.createElement('li');
+              li.className = 'mb-2';
+              li.innerHTML = `
+                <a class="dropdown-item border-radius-md" href="javascript:;" onclick="viewCandidature(${candidature.id}, '${candidature.nom_complet}')">
+                  Nouvelle candidature de ${candidature.nom_complet} pour ${candidature.poste}
+                  <br><small>${candidature.date_postulation}</small>
+                </a>
+              `;
+              notificationList.appendChild(li);
+            });
+          } else {
+            notificationList.innerHTML = '<li class="mb-2"><a class="dropdown-item border-radius-md" href="javascript:;">Aucune notification</a></li>';
+            notificationCount.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error('Erreur lors du chargement des notifications:', error);
+          notificationList.innerHTML = '<li class="mb-2"><a class="dropdown-item border-radius-md" href="javascript:;">Erreur de chargement</a></li>';
+        });
+    }
+
+    // Fonction pour voir une candidature (ouvre le modal des candidats)
+    function viewCandidature(candidatureId, nomComplet) {
+      fetch(`../../../controllers/CandidatureController.php?action=getCandidature&id=${candidatureId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.candidature) {
+            const candidature = data.candidature;
+            document.getElementById('offreTitre').textContent = candidature.poste;
+            const candidatesList = document.getElementById('candidatesList');
+            candidatesList.innerHTML = `
+              <tr>
+                <td><p class="text-xs font-weight-bold mb-0">${candidature.id}</p></td>
+                <td><p class="text-xs mb-0">${candidature.nom_complet}</p></td>
+                <td><p class="text-xs mb-0">${candidature.email}</p></td>
+                <td><p class="text-xs mb-0">${candidature.telephone || '-'}</p></td>
+                <td><p class="text-xs mb-0">${candidature.date_postulation}</p></td>
+                <td class="align-middle text-center">
+                  <span class="badge badge-status ${candidature.status.toLowerCase().replace('é', 'e').replace(' ', '-')}">${candidature.status}</span>
+                </td>
+                <td class="align-middle text-center">
+                  <a href="../../../Uploads/cvs/${candidature.cv_path}" target="_blank" class="btn btn-custom btn-sm">Voir CV</a>
+                  <button class="btn btn-info btn-sm view-candidature" data-candidature='${JSON.stringify(candidature)}'>
+                    <i class="material-symbols-rounded">visibility</i>
+                  </button>
+                  <button class="btn btn-success btn-sm accept-candidature" data-candidature-id="${candidature.id}">
+                    <i class="material-symbols-rounded">check_circle</i>
+                  </button>
+                  <button class="btn btn-danger btn-sm reject-candidature" data-candidature-id="${candidature.id}">
+                    <i class="material-symbols-rounded">cancel</i>
+                  </button>
+                </td>
+              </tr>
+            `;
+            
+            const candidatesModal = new bootstrap.Modal(document.getElementById('candidatesModal'), {
+              keyboard: false
+            });
+            candidatesModal.show();
+          }
+        });
+    }
+
+    // Afficher les candidats pour une offre
+    document.addEventListener('click', function(event) {
+      const candidatesButton = event.target.closest('.view-candidates');
+      if (candidatesButton) {
+        const offreId = candidatesButton.getAttribute('data-offre-id');
+        const offreTitre = candidatesButton.getAttribute('data-offre-titre');
+        const candidatesList = document.getElementById('candidatesList');
+        const offreTitreSpan = document.getElementById('offreTitre');
+
+        // Mettre à jour le titre du modal
+        offreTitreSpan.textContent = offreTitre;
+
+        // Vider la liste des candidats
+        candidatesList.innerHTML = '';
+
+        // Afficher le modal
+        const candidatesModal = new bootstrap.Modal(document.getElementById('candidatesModal'), {
+          keyboard: false
+        });
+        candidatesModal.show();
+
+        // Appeler l'API pour récupérer les candidats
+        fetch(`../../../controllers/CandidatureController.php?action=getCandidaturesByOffre&offre_id=${offreId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && data.candidatures.length > 0) {
+              data.candidatures.forEach(candidature => {
+                const statusClass = candidature.status.toLowerCase().replace('é', 'e').replace(' ', '-');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                  <td><p class="text-xs font-weight-bold mb-0">${candidature.id}</p></td>
+                  <td><p class="text-xs mb-0">${candidature.nom_complet}</p></td>
+                  <td><p class="text-xs mb-0">${candidature.email}</p></td>
+                  <td><p class="text-xs mb-0">${candidature.telephone || '-'}</p></td>
+                  <td><p class="text-xs mb-0">${candidature.date_postulation}</p></td>
+                  <td class="align-middle text-center">
+                    <span class="badge badge-status ${statusClass}">${candidature.status}</span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <a href="../../../Uploads/cvs/${candidature.cv_path}" target="_blank" class="btn btn-custom btn-sm">Voir CV</a>
+                    <button class="btn btn-info btn-sm view-candidature" 
+                            data-candidature='${JSON.stringify(candidature)}'>
+                      <i class="material-symbols-rounded">visibility</i>
+                    </button>
+                    <button class="btn btn-success btn-sm accept-candidature" 
+                            data-candidature-id="${candidature.id}">
+                      <i class="material-symbols-rounded">check_circle</i>
+                    </button>
+                    <button class="btn btn-danger btn-sm reject-candidature" 
+                            data-candidature-id="${candidature.id}">
+                      <i class="material-symbols-rounded">cancel</i>
+                    </button>
+                  </td>
+                `;
+                candidatesList.appendChild(row);
+              });
+
+              // Gérer le bouton "Voir" pour afficher les détails
+              document.querySelectorAll('.view-candidature').forEach(button => {
+                button.addEventListener('click', function() {
+                  const candidature = JSON.parse(this.getAttribute('data-candidature'));
+                  document.getElementById('detail-id').textContent = candidature.id;
+                  document.getElementById('detail-nom').textContent = candidature.nom_complet;
+                  document.getElementById('detail-email').textContent = candidature.email;
+                  document.getElementById('detail-telephone').textContent = candidature.telephone || '-';
+                  document.getElementById('detail-date').textContent = candidature.date_postulation;
+                  document.getElementById('detail-status').textContent = candidature.status;
+                  document.getElementById('detail-cv').setAttribute('href', `../../../Uploads/cvs/${candidature.cv_path}`);
+
+                  const detailsModal = new bootstrap.Modal(document.getElementById('candidateDetailsModal'), {
+                    keyboard: false
+                  });
+                  detailsModal.show();
+                });
+              });
+
+              // Gérer les boutons "Accepter" et "Rejeter"
+              document.querySelectorAll('.accept-candidature, .reject-candidature').forEach(button => {
+                button.addEventListener('click', function() {
+                  const candidatureId = this.getAttribute('data-candidature-id');
+                  const newStatus = this.classList.contains('accept-candidature') ? 'Accepté' : 'Rejeté';
+
+                  fetch('../../../controllers/CandidatureController.php', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=updateStatus&candidature_id=${candidatureId}&status=${encodeURIComponent(newStatus)}`
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.success) {
+                        const row = this.closest('tr');
+                        const statusCell = row.querySelector('.badge-status');
+                        const statusClass = newStatus.toLowerCase().replace('é', 'e').replace(' ', '-');
+                        statusCell.className = `badge badge-status ${statusClass}`;
+                        statusCell.textContent = newStatus;
+                        alert(`Candidature ${newStatus.toLowerCase()} avec succès`);
+                        // Recharger les notifications après mise à jour du statut
+                        loadNotifications();
+                      } else {
+                        alert('Erreur : ' + data.message);
+                      }
+                    })
+                    .catch(error => {
+                      alert('Erreur lors de la mise à jour du statut : ' + error);
+                    });
+                });
+              });
+            } else {
+              candidatesList.innerHTML = '<tr><td colspan="7" class="text-center">Aucune candidature trouvée pour cette offre.</td></tr>';
+            }
+          })
+          .catch(error => {
+            candidatesList.innerHTML = '<tr><td colspan="7" class="text-center">Erreur lors du chargement des candidats.</td></tr>';
+          });
+      }
+    });
+
+    // Charger les notifications au chargement de la page
+    document.addEventListener('DOMContentLoaded', loadNotifications);
+
+    
   </script>
+  <script src="../assets/js/notifications.js"></script>
+  <script src="../assets/js/notification-handlers.js"></script>
 </body>
 </html>

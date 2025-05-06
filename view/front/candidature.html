@@ -6,6 +6,7 @@
     <title>Mes Candidatures - Localoo</title>
     
     <!-- CSS identique à front.php -->
+    <link rel="stylesheet" href="assets/css/speech-input.css">
     <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/linearicons.css">
@@ -201,9 +202,13 @@
                             <input type="file" class="form-control-file" id="modifierCv" name="cv" accept=".pdf">
                             <small class="form-text text-muted">Laissez vide pour conserver le CV actuel.</small>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group speech-input-group">
                             <label for="modifierMessage">Message de motivation</label>
                             <textarea class="form-control" id="modifierMessage" name="message" rows="5"></textarea>
+                            <button type="button" id="start-speech-modifier" class="btn btn-outline-primary mt-2">
+                                <i class="fa fa-microphone"></i> Enregistrer un message vocal
+                            </button>
+                            <span id="speech-status-modifier" class="text-muted ml-2"></span>
                         </div>
                         <input type="hidden" id="modifierCandidatureId" name="candidature_id">
                         <input type="hidden" id="modifierOffreId" name="offre_id">
@@ -472,5 +477,7 @@
         });
     });
     </script>
+    <script src="assets/js/speech-to-text.js"></script>
+    
 </body>
 </html>
