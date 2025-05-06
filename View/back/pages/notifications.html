@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Posts & Comments</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f2f4f7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f8f9fa;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+      cursor: pointer;
+    }
+    .post-details {
+      display: none;
+      margin-top: 30px;
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+    }
+    .post-details img {
+      max-width: 100%;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+    .comment {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+    }
+    .comment strong {
+      color: #007bff;
+    }
+    .btn-group {
+      margin-top: 10px;
+    }
+    .btn-danger-custom {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+.btn-danger-custom:hover {
+  background-color: #c0392b;
+}
+.btn-edit {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.btn-edit:hover {
+  background-color: #2980b9;
+}
+.btn-neon {
+  background: #111;
+  color: #0ff;
+  border: 1px solid #0ff;
+  padding: 8px 20px;
+  border-radius: 4px;
+  text-shadow: 0 0 5px #0ff;
+  box-shadow: 0 0 10px #0ff;
+  transition: 0.3s ease;
+}
+.btn-neon:hover {
+  background: #0ff;
+  color: #111;
+  box-shadow: 0 0 15px #0ff;
+}
+body {
+      background-color: #f2f4f7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .admin-panel {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .admin-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .post {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background-color: #fafafa;
+      transition: box-shadow 0.3s ease;
+    }
+    .post:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .post-header h4 {
+      margin: 0;
+      font-size: 20px;
+      color: #222;
+    }
+    .post-header small {
+      color: #666;
+    }
+    .comment {
+      background: #ffffff;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-left: 4px solid #007bff;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .comment p {
+      margin: 0;
+    }
+    .btn-danger, .btn-primary {
+      margin-left: 10px;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .comment-header {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .comment-actions button {
+      margin-left: 5px;
+    }
+    .comment-actions {
+      margin-top: 5px;
+    }
+    /* Forum Styles */
+    .forum-container {
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 0 15px rgba(0,0,0,0.1);
+          margin-bottom: 40px;
+      }
+      
+      .forum-header {
+          margin-bottom: 30px;
+          text-align: center;
+      }
+      
+      .forum-header h2 {
+          font-size: 28px;
+          color: #333;
+          margin-bottom: 10px;
+      }
+      
+      .forum-nav {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 20px;
+      }
+      
+      .forum-tabs {
+          display: flex;
+      }
+      
+      .forum-tab {
+          padding: 10px 20px;
+          background: #f5f5f5;
+          margin-right: 10px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: 600;
+      }
+      
+      .forum-tab.active {
+          background: #ff6b6b;
+          color: white;
+      }
+      
+      .forum-content {
+          display: none;
+      }
+      
+      .forum-content.active {
+          display: block;
+      }
+      
+      /* Post Styles */
+      .post-card {
+          background: #fff;
+          border-radius: 8px;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          padding: 20px;
+          position: relative;
+      }
+      
+      .post-header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 15px;
+      }
+      
+      .post-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: #f5f5f5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 15px;
+          color: #ff6b6b;
+          font-weight: bold;
+      }
+      
+      .post-user {
+          font-weight: 600;
+          color: #333;
+      }
+      
+      .post-time {
+          font-size: 12px;
+          color: #999;
+          margin-left: 10px;
+      }
+      
+      .post-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 10px;
+          color: #333;
+      }
+      
+      .post-content {
+          color: #555;
+          margin-bottom: 15px;
+      }
+      
+      .post-image {
+          max-width: 100%;
+          border-radius: 4px;
+          margin-bottom: 15px;
+      }
+      
+      .post-actions {
+          display: flex;
+          align-items: center;
+      }
+      
+      .vote-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #999;
+          font-size: 18px;
+          margin-right: 10px;
+      }
+      
+      .vote-btn.active {
+          color: #ff6b6b;
+      }
+      
+      .vote-count {
+          font-weight: 600;
+          margin: 0 10px;
+      }
+      
+      .comment-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #999;
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+      }
+      
+      .comment-btn i {
+          margin-right: 5px;
+      }
+      
+      .post-owner-actions {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+      }
+      
+      .post-owner-actions button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #999;
+          margin-left: 10px;
+      }
+      
+      /* Comment Styles */
+      .comment-form {
+          margin-top: 30px;
+          padding: 20px;
+          background: #f9f9f9;
+          border-radius: 8px;
+      }
+      
+      .comment-form h3 {
+          margin-bottom: 15px;
+          font-size: 18px;
+      }
+      
+      .comment-form textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          min-height: 100px;
+          margin-bottom: 10px;
+      }
+      
+      .comments-section {
+          margin-top: 30px;
+      }
+      
+      .comment-card {
+          padding: 15px;
+          background: #f9f9f9;
+          border-radius: 8px;
+          margin-bottom: 15px;
+      }
+      
+      .comment-header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+      }
+      
+      .comment-user {
+          font-weight: 600;
+          font-size: 14px;
+      }
+      
+      .comment-time {
+          font-size: 12px;
+          color: #999;
+          margin-left: 10px;
+      }
+      
+      .comment-content {
+          color: #555;
+          font-size: 14px;
+      }
+      
+      .comment-actions {
+          margin-top: 10px;
+          font-size: 12px;
+      }
+      
+      .comment-actions button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #999;
+          margin-right: 10px;
+      }
+      
+      /* Create Post Modal */
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1000;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0,0,0,0.5);
+      }
+      
+      .modal-content {
+          background-color: #fff;
+          margin: 10% auto;
+          padding: 30px;
+          border-radius: 8px;
+          width: 80%;
+          max-width: 600px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      }
+      
+      .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+      
+      .modal-header h2 {
+          margin: 0;
+          color: #333;
+      }
+      
+      .close-btn {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #999;
+      }
+      
+      .form-group {
+          margin-bottom: 20px;
+      }
+      
+      .form-group label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #555;
+      }
+      
+      .form-group input,
+      .form-group textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+      
+      .form-group textarea {
+          min-height: 150px;
+      }
+      
+      .submit-btn {
+          background-color: #ff6b6b;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: 600;
+      }
+      
+      .submit-btn:hover {
+          background-color: #ff5252;
+      }
+      
+      /* Auth Styles */
+      .auth-container {
+          max-width: 400px;
+          margin: 0 auto;
+          padding: 30px;
+          background: #fff;
+          border-radius: 8px;
+          box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      }
+      
+      .auth-header {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+      
+      .auth-header h2 {
+          color: #333;
+          margin-bottom: 10px;
+      }
+      
+      .auth-form .form-group {
+          margin-bottom: 20px;
+      }
+      
+      .auth-form .form-control {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+      
+      .auth-form .btn-primary {
+          width: 100%;
+          padding: 12px;
+          background-color: #ff6b6b;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-weight: 600;
+          cursor: pointer;
+      }
+      
+      .auth-form .btn-primary:hover {
+          background-color: #ff5252;
+      }
+      
+      .auth-footer {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 14px;
+      }
+      
+      .auth-footer a {
+          color: #ff6b6b;
+          text-decoration: none;
+      }
+      
+      .error-message {
+          color: #ff6b6b;
+          font-size: 14px;
+          margin-top: 5px;
+      }
+    .admin-panel {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .admin-panel h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .post {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .comment {
+      background: #f9f9f9;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    .btn-danger {
+      float: right;
+    }
+    
+  </style>
+</head>
+<body class="g-sidenav-show bg-gray-100">
+
+  
+
+  <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2" id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"></i>
+      <a class="navbar-brand px-4 py-3 m-0" href="dashboard.html">
+        <img src="../assets/img/logolocaloo.png" class="navbar-brand-img" width="250" height="250" alt="Logo Localoo">
+      </a>
+    </div>
+    <hr class="horizontal dark mt-0 mb-2">
+    <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="../pages/dashboard.html"><i class="material-symbols-rounded opacity-5">dashboard</i><span class="nav-link-text ms-1">Dashboard</span></a></li>
+        <li class="nav-item"><a class="nav-link active bg-gradient-dark text-white" href="../pages/events.php"><i class="material-symbols-rounded opacity-5">table_view</i><span class="nav-link-text ms-1">Forum</span></a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="../pages/emploi.html">
+ 
+  <i class="material-symbols-rounded opacity-5">view_in_ar</i><span class="nav-link-text ms-1">Review</span></a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="../pages/reclamation.html"><i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i><span class="nav-link-text ms-1">Réclamation</span></a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="../pages/forum.html"><i class="material-symbols-rounded opacity-5">forum</i><span class="nav-link-text ms-1">Forum</span></a></li>
+      </ul>
+    </div>
+    <div class="sidenav-footer position-absolute w-100 bottom-0">
+      <div class="mx-3">
+        <a class="btn btn-outline-dark mt-4 w-100" href="https://www.localoo.com/documentation">Documentation</a>
+        <a class="btn bg-gradient-dark w-100" href="https://www.localoo.com/upgrade">Upgrade to pro</a>
+      </div>
+    </div>
+  </aside>
+  <div class="container">
+    <h2 class="text-center mb-4">Liste des Posts</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Content</th>
+          <th>User</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="posts-list"></tbody>
+    </table>
+
+    <div class="post-details" id="post-details">
+      <h3 id="detail-title"></h3>
+      <p><strong>Par :</strong> <span id="detail-user"></span></p>
+      <p id="detail-content"></p>
+      <img id="detail-image" style="display:none;" />
+      <div class="btn-group">
+        <button class="btn-danger-custom" id="btn-delete-post">Supprimer</button>
+        <button class="btn-edit" id="btn-edit-post">Modifier</button>
+      </div>
+      <div>
+        <h5>Commentaires :</h5>
+        <div id="detail-comments"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedPost = null;
+
+    function loadPosts() {
+      fetch("/../Localo/Model/get_posts.php")
+        .then(res => res.json())
+        .then(posts => {
+          const container = document.getElementById("posts-list");
+          container.innerHTML = "";
+
+          posts.forEach(post => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${post.title}</td>
+              <td>${post.content.substring(0, 50)}...</td>
+              <td>${post.username}</td>
+              <td>
+                <button class="btn-edit" onclick='showPostDetail(${JSON.stringify(post)})'>Voir</button>
+              </td>
+            `;
+            container.appendChild(row);
+          });
+        });
+    }
+
+    function showPostDetail(post) {
+      selectedPost = post;
+      document.getElementById("detail-title").innerText = post.title;
+      document.getElementById("detail-user").innerText = post.username;
+      document.getElementById("detail-content").innerText = post.content;
+
+      const imageEl = document.getElementById("detail-image");
+      if (post.image) {
+        imageEl.src = `/../Localo/uploads/${post.image}`;
+        imageEl.style.display = "block";
+      } else {
+        imageEl.style.display = "none";
+      }
+
+      document.getElementById("post-details").style.display = "block";
+      loadComments(post.id);
+    }
+
+    function loadComments(postId) {
+      fetch(`/../Localo/Model/get_comments.php?post_id=${postId}`)
+        .then(res => res.json())
+        .then(comments => {
+          const commentSection = document.getElementById("detail-comments");
+          commentSection.innerHTML = "";
+          comments.forEach(c => {
+            const div = document.createElement("div");
+            div.className = "comment";
+            div.innerHTML = `
+              <strong>${c.username}</strong>: ${c.content}
+              <button onclick="deleteComment(${c.id})" class="btn-danger-custom">Supprimer</button>
+            `;
+            commentSection.appendChild(div);
+          });
+        });
+    }
+    function handleEditPost(e) {
+  e.preventDefault();
+  const title = document.getElementById('edit-post-title').value.trim();
+  const content = document.getElementById('edit-post-content').value.trim();
+  const imageInput = document.getElementById('edit-post-image');
+  const formData = new FormData();
+
+  if (!title || !content || !currentPostId || !currentUser) {
+    alert('Champs manquants ou utilisateur non connecté');
+    return;
+  }
+
+  formData.append('post_id', currentPostId);
+  formData.append('title', title);
+  formData.append('content', content);
+  formData.append('user_id', currentUser.id); // 👈 important si plus de login
+
+  if (imageInput.files.length > 0) {
+    formData.append('image', imageInput.files[0]);
+  }
+
+  fetch('/../Localo/Controller/update_post.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(response => {
+    if (response.success) {
+      alert('Post mis à jour avec succès !');
+      closeModal();
+      loadPostDetail(currentPostId);
+    } else {
+      alert('Erreur : ' + response.error);
+    }
+  })
+  .catch(err => {
+    console.error('Erreur lors de la mise à jour du post :', err);
+    alert('Erreur inattendue');
+  });
+}
+
+    document.getElementById("btn-delete-post").onclick = () => {
+      if (!selectedPost) return;
+      if (!confirm("Confirmer la suppression de ce post ?")) return;
+
+      fetch("/../Localo/Controller/delete_post.php", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ post_id: selectedPost.id })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Post supprimé.");
+          location.reload();
+        }
+      });
+    };
+
+    function deleteComment(commentId) {
+      if (!confirm("Confirmer la suppression de ce commentaire ?")) return;
+
+      fetch("/../Localo/Controller/delete_comment.php", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment_id: commentId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Commentaire supprimé.");
+          loadComments(selectedPost.id);
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadPosts);
+  </script>
+
+</body>
+</html>
