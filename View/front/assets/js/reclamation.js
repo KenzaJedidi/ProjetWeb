@@ -176,5 +176,48 @@ $(document).ready(function() {
         }
     ];
     
+
+
+       /////......................trie........................................................//////////////
+
+
+
+       
+       // Fonction pour trier les réclamations par un champ spécifique
+function trierReclamations(champ) {
+    // Envoie d'une requête GET avec le paramètre 'sort' dans l'URL
+    fetch(`../../Controller/ReclamationC.php?sort=${champ}`)
+      .then(response => response.json())
+      .then(data => {
+        // Générer dynamiquement les lignes du tableau avec les données triées
+        let rows = '';
+        data.forEach(reclamation => {
+          rows += `<tr>
+            <td>${reclamation.idUser}</td>
+            <td>${reclamation.Type}</td>
+            <td>${reclamation.Message}</td>
+            <td>${reclamation.statut}</td>
+            <td>${reclamation.dateReclamation}</td>
+          </tr>`;
+        });
+        // Mettre à jour le contenu du tableau
+        document.querySelector("#tableReclamations tbody").innerHTML = rows;
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+      });
+  }
+  
+  // Appeler la fonction de tri par défaut (tri par dateReclamation) au chargement de la page
+  window.onload = () => {
+    trierReclamations('dateReclamation');
+  };
+  
+
+
+
+
+
+
     displayReclamations();
 });
