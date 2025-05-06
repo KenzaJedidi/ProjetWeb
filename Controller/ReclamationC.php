@@ -112,6 +112,37 @@ class ReclamationC {
             die('Erreur: ' . $e->getMessage());
         }
     }
+
+
+////////////////.......................rechercher...................................///////////////
+public function rechercherReclamations($search) {
+    $sql = "SELECT * FROM reclamation WHERE 
+            idReclamation LIKE :search OR 
+            Type LIKE :search OR 
+            Message LIKE :search OR 
+            dateReclamation LIKE :search OR 
+            statut LIKE :search";
+    $db = config::getConnexion();
+    try {
+        $query = $db->prepare($sql);
+        $query->execute(['search' => '%'.$search.'%']);
+        return $query->fetchAll();
+    } catch (Exception $e) {
+        die('Erreur: ' . $e->getMessage());
+    }
+}
+
+public function getReclamationStatsByType() {
+    $sql = "SELECT Type, COUNT(*) as count FROM reclamation GROUP BY Type";
+    $db = config::getConnexion(); // Obtenir la connexion comme dans les autres méthodes
+    try {
+        $stmt = $db->prepare($sql); // Utiliser $db au lieu de $this->db
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die('Erreur: ' . $e->getMessage());
+    }
+}
 }
 
 ?>

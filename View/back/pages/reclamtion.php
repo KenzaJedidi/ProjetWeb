@@ -4,8 +4,18 @@ include '../../../Controller/UserC.php';
 
 $ReclamationC = new ReclamationC();
 $UserC = new UserC();
+$stats = $ReclamationC->getReclamationStatsByType();
+// Récupérer le terme de recherche
+$search = isset($_GET['search_idReclamation']) ? $_GET['search_idReclamation'] : '';
 
-$listeReclamation = $ReclamationC->AfficherReclamation();
+if (!empty($search)) {
+  // Appel de la méthode pour rechercher les réclamations selon le critère
+  $listeReclamation = $ReclamationC->rechercherReclamations($search);
+} else {
+  // Sinon, on affiche toutes les réclamations
+  $listeReclamation = $ReclamationC->AfficherReclamation();
+}
+
 
 ?>
 
@@ -131,6 +141,7 @@ $listeReclamation = $ReclamationC->AfficherReclamation();
       <div class="mx-3">
         <a class="btn btn-outline-dark mt-4 w-100" href="https://www.localoo.com/documentation" type="button">Documentation</a>
         <a class="btn bg-gradient-dark w-100" href="https://www.localoo.com/upgrade" type="button">Upgrade to pro</a>
+        
       </div>
     </div>
   </aside>
@@ -149,16 +160,17 @@ $listeReclamation = $ReclamationC->AfficherReclamation();
           </ol>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
-              <label class="form-label">Rechercher une réclamation...</label>
-              <input type="text" class="form-control">
-            </div>
+        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+  <form method="GET" class="d-flex">
+    <input type="text" name="search_idReclamation" class="form-control form-control-sm" 
+           placeholder="Rechercher une réclamation..." 
+           value="<?= htmlspecialchars($search) ?>">
+    <button type="submit" class="btn btn-custom btn-sm ms-2">Rechercher</button>
+  </form>
+</div>
+
           </div>
           <ul class="navbar-nav d-flex align-items-center justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="add-reclamation.html" target="_blank">Nouvelle Réclamation</a>
-            </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
@@ -303,7 +315,9 @@ $listeReclamation = $ReclamationC->AfficherReclamation();
               <h6 class="mb-0">Liste des Réclamations</h6>
               <div>
                 <a href="AfficherReponses.php" class="btn btn-custom btn-sm">Liste Reponses</a>
-                <button class="btn btn-outline-secondary btn-sm ms-2">Exporter</button>
+                <div>
+  <a href="statistique_reclamations.php" class="btn btn-info btn-sm ms-2">Statistiques</a>
+</div>
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
