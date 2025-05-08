@@ -9,8 +9,9 @@ $userC = new userC();
 if (isset($_POST["code"]) && isset($_GET["id"])) {
     if (!empty($_POST["code"])) {
         if ($userC->verifyCode($_GET["id"], $_POST["code"])) {
-            $userC->clearVerificationCode($_GET["id"]);
+        
             header('Location:newpass.php?id=' . $_GET['id']);
+            
             exit();
         } else {
             $error = 'Invalid code. Please try again.';

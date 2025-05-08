@@ -121,11 +121,7 @@ html,body{height: 100%;}
 /*-------------------------------------
         2. Header-top
 --------------------------------------*/
-.header-top {
-    background: linear-gradient(135deg, #4680FF 0%, #6AA6FF 100%);
-    padding: 12px 0;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-}
+.header-top{border-bottom:1px solid #f6f8fa;}
 
 .header-top ul li {display: inline-block;}
 
@@ -173,9 +169,8 @@ html,body{height: 100%;}
         3. Top-area
 --------------------------------------*/
 nav.navbar.bootsnav {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    background-color:#fff;
+    border-bottom: transparent;
 }
 .wrap-sticky nav.navbar.bootsnav.sticked {background-color: #fff;box-shadow: 0 2px 5px rgba(0,0,0,.2);}
 
@@ -183,12 +178,12 @@ nav.navbar.bootsnav {
 .navbar-header a.navbar-brand,.navbar-header a.navbar-brand:hover,.navbar-header a.navbar-brand:focus {
     display: inline-block;
     color: #1b1e20;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     padding: 34px 0px;
     text-transform:capitalize;
 }
-.navbar-header a.navbar-brand span{display: inline-block;color:#4680FF;text-transform:capitalize;}
+.navbar-header a.navbar-brand span{display: inline-block;color:#ff545a;text-transform:capitalize;}
 
 .wrap-sticky nav.navbar.bootsnav.sticked .navbar-header a.navbar-brand,.wrap-sticky nav.navbar.bootsnav.sticked .navbar-header a.navbar-brand:hover,.wrap-sticky nav.navbar.bootsnav.sticked .navbar-header a.navbar-brand:focus {padding:30px 0px;}
 /*.navbar-brand*/
@@ -248,11 +243,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 --------------------------------------*/
 .welcome-hero {
     position: relative;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/welcome-hero/banner.jpg');
+    background:url(../images/welcome-hero/banner.jpg)no-repeat;
     background-position:center;
     background-size:cover;
     text-align: center;
-    padding: 150px 0;
+    height:800px;
     z-index: 1;
 }
 .welcome-hero:before{
@@ -274,23 +269,14 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
     text-transform: uppercase;
     letter-spacing: 2.4px;
     line-height: 1.4;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 .welcome-hero-txt p {
     font-size: 18px;
-    color: rgba(255,255,255,0.9);
-    margin-top: 20px;
+    color: #fcfcfc;
+    margin-top: 25px;
 }
 
-.welcome-hero-serch-box {
-    margin-top: 78px;
-    display: flex;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    backdrop-filter: blur(10px);
-}
+.welcome-hero-serch-box{margin-top: 78px;display: flex;}
 .welcome-hero-form {
     display: flex;
     background: #fff;
@@ -311,22 +297,14 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
     margin-left: 10px;
     height: 70px;
     width: 300px;
-    border: 1px solid #e0e0e0;
+    border: 0;
     background: transparent;
-    border-radius: 8px;
-    padding: 15px 20px;
-    font-size: 16px;
-    transition: all 0.3s ease;
 }
 .single-welcome-hero-form input[type="text"]{
     font-size: 14px;
     color: #859098;
     text-transform: capitalize;
     font-weight: 500;
-}
-.single-welcome-hero-form input:focus {
-    border-color: #4680FF;
-    box-shadow: 0 0 0 3px rgba(70, 128, 255, 0.2);
 }
 .welcome-hero-form-icon {
     position: absolute;
@@ -378,16 +356,15 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
     width: 205px;
     height: 170px;
     background:#fff;
-    border-radius: 15px;
+    border-radius: 3px;
     margin-right: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    padding: 25px;
+    box-shadow: 0 0px 10px rgba(71,71,71,.2);
     -webkit-transition: .3s linear; 
     -moz-transition:.3s linear; 
     -ms-transition:.3s linear; 
     -o-transition:.3s linear;
-    transition: all 0.3s ease;
+    transition: .3s linear;
 }
 .single-list-topics-content h2>a { margin: 13px 0;}
 /*.single-list-topics-content:last-child{margin-right: 0;}*/
@@ -399,8 +376,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 .single-list-topics-content:hover{
     color: #fff;
     background:#81d8d0;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    transform: translateY(-5px);
+    box-shadow: 0 5px 10px rgba(71,71,71,.4);
 }
 
 /*-------------------------------------
@@ -470,11 +446,13 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 .single-explore-item {
     background: #fff;
     border: 1px solid #edeff1;
-    border-radius: 15px;
+    border-radius: 3px;
     margin-bottom: 25px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
+    -webkit-transition: .3s linear; 
+    -moz-transition:.3s linear; 
+    -ms-transition:.3s linear; 
+    -o-transition:.3s linear;
+    transition: .3s linear;
 }
 .single-explore-img{position:relative;overflow: hidden;}
 .single-explore-img:before {
@@ -537,7 +515,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 .single-explore-image-icon-box ul li:hover i{color: #267dff;}
 
 .single-explore-txt {
-    padding: 25px;
+    padding: 26px 25px 24px 15px;
 }
 .single-explore-txt.bg-theme-1 .explore-rating{background: #70a9ff;}
 .single-explore-txt.bg-theme-2 .explore-rating{background: #00c61c;}
@@ -599,10 +577,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 }
 .explore-map-icon a svg:hover{color: #81d8d0;}
 .single-explore-txt.bg-theme-2 .explore-map-icon a svg:hover{color: #00c437;}
-.single-explore-item:hover{
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    transform: translateY(-5px);
-}
+.single-explore-item:hover{box-shadow: 0 10px 20px rgba(21,19,19,.2);}
 
 /*-------------------------------------
         8. Reviews
@@ -869,12 +844,6 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 /*-------------------------------------
         12. Footer
 --------------------------------------*/
-.footer {
-    background: #2c3e50;
-    color: white;
-    padding: 60px 0 0;
-}
-
 .footer-menu {padding: 45px 0;}
 .footer-menu .navbar-header{padding:0;}
 .footer-menu .navbar-header a.navbar-brand,.footer-menu.footer-menu .navbar-header a.navbar-brand:hover,.footer-menu .navbar-header a.navbar-brand:focus{
@@ -884,19 +853,16 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 .footer-menu ul.footer-menu-item{text-align: right;}
 .footer-menu ul.footer-menu-item li{display: inline-block;}
 .footer-menu ul.footer-menu-item li a {
-    color: rgba(255,255,255,0.8);
+    color: #859098;
     font-size: 14px;
     text-transform: uppercase;
     padding-left: 40px;
     -webkit-transition:0.3s linear;
     -moz-transition:0.3s linear;
     -o-transition:0.3s linear;
-    transition: all 0.3s ease;
+    transition:0.3s linear;
 }
-.footer-menu ul.footer-menu-item li a:hover {
-    color: #4680FF;
-    text-decoration: none;
-}
+.footer-menu ul.footer-menu-item li a:hover{color: #81d8d0;}
 .hm-footer-copyright {
     padding: 40px 0;
     border-top: 1px solid #e1e5eb;
@@ -927,21 +893,13 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
     width: 35px;
     height: 35px;
     line-height: 35px;
-    background: rgba(255,255,255,0.1);
+    background: #eef2f6;
     text-align: center;
     border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 5px;
-    transition: all 0.3s ease;
 }
 .footer-social span {margin-right:15px;margin-left: 0;color: #a5adb3;}
 .footer-social span:hover{color: #81d8d0;}
-.footer-social a:hover {
-    background: #4680FF;
-    transform: translateY(-3px);
-}
+.footer-social a:hover {background:#81d8d0;color: #fff;}
 
 /*===============================
     Scroll Top
@@ -989,20 +947,5 @@ nav.navbar.bootsnav .navbar-toggle i{color: #81d8d0;}
 @keyframes example {
     0%   {bottom:0px;}
     100%  {bottom:7px;}
-}
-
-/* Responsive Improvements */
-@media (max-width: 768px) {
-    .welcome-hero-txt h2 {
-        font-size: 36px;
-    }
-    
-    .welcome-hero-serch-box {
-        padding: 20px;
-    }
-    
-    .single-welcome-hero-form {
-        margin-bottom: 15px;
-    }
 }
 /*========================Thank you=================

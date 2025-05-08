@@ -9,12 +9,17 @@ $userC = new userC();
 if (isset($_POST["pass"]) && isset($_GET['id'])) {
     if (!empty($_POST["pass"])) {
         if (strlen($_POST["pass"]) >= 8) {
-            if ($userC->updatePassword($_GET['id'], $_POST["pass"])) {
-                header('Location:signin.php');
-                exit();
-            } else {
-                $error = 'Failed to update password. Please try again.';
-            }
+            
+            $userC->updatePassword($_GET['id'], $_POST["pass"]);
+            $userC->clearVerificationCode($_GET["id"]);
+            header('Location:signin.php');
+
+            // if ($userC->updatePassword($_GET['id'], $_POST["pass"])) {
+            //     header('Location:signin.php');
+            //     exit();
+            // } else {
+            //     $error = 'Failed to update password. Please try again.';
+            // }
         } else {
             $error = 'Password must be at least 8 characters long.';
         }
@@ -36,6 +41,7 @@ if (isset($_POST["pass"]) && isset($_GET['id'])) {
                 echo '<p style="color: red;">' . $error . '</p>';
             }
             ?>
+
 
             <input type="password" name="pass" placeholder="New Password" />
             <button type="submit">Change</button>
