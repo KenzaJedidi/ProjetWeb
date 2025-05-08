@@ -113,6 +113,102 @@ if (isset($_POST['login'])) {
         .is-invalid {
             border-color: #dc3545 !important;
         }
+
+        /* Modifiez ces styles pour agrandir le logo */
+        .navbar-brand img, 
+        .logo-lg, 
+        .logo-display,
+        .logo-scrolled,
+        .auth-wrapper .card img[alt="Logo"] {
+            max-height: 80px !important; /* Augmentation de la taille du logo */
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Animation subtile au survol */
+        .navbar-brand img:hover, 
+        .logo-lg:hover, 
+        .auth-wrapper .card img[alt="Logo"]:hover {
+            transform: scale(1.05);
+        }
+
+        /* Ajustement pour la page de connexion admin */
+        .auth-wrapper .card .text-center img {
+            max-height: 90px !important; /* Logo encore plus grand sur la page de connexion */
+            margin: 0.5rem 0 1.5rem;
+        }
+
+        /* Pour le mode responsive - ajustez selon vos besoins */
+        @media (max-width: 768px) {
+            .navbar-brand img, 
+            .logo-lg, 
+            .logo-display,
+            .logo-scrolled {
+                max-height: 60px !important;
+            }
+            
+            .auth-wrapper .card .text-center img {
+                max-height: 70px !important;
+            }
+        }
+        
+        /* Pour les très petits écrans */
+        @media (max-width: 480px) {
+            .navbar-brand img, 
+            .logo-lg, 
+            .logo-display,
+            .logo-scrolled {
+                max-height: 50px !important;
+            }
+            
+            .auth-wrapper .card .text-center img {
+                max-height: 60px !important;
+            }
+        }
+
+        /* Agrandissement significatif du logo */
+        .auth-wrapper .card .text-center img {
+            max-height: 120px !important; /* Logo beaucoup plus grand */
+            width: auto;
+            object-fit: contain;
+            margin: 0.5rem 0 1.75rem;
+            transition: all 0.4s ease;
+            filter: drop-shadow(0 5px 10px rgba(79, 192, 212, 0.2));
+        }
+
+        /* Animation légère au chargement */
+        @keyframes logoEntrance {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .auth-wrapper .card .text-center img {
+            animation: logoEntrance 0.7s ease forwards;
+        }
+
+        /* Effet au survol */
+        .auth-wrapper .card .text-center img:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 8px 16px rgba(79, 192, 212, 0.3));
+        }
+
+        /* Ajustements pour la page responsive */
+        @media (min-width: 992px) {
+            .auth-wrapper .card .text-center img {
+                max-height: 140px !important; /* Encore plus grand sur les écrans larges */
+            }
+        }
+
+        /* Ajustement du conteneur pour accueillir le logo plus grand */
+        .auth-wrapper .card {
+            padding-top: 20px;
+        }
+        
+        .auth-wrapper .card .text-center {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -130,7 +226,7 @@ if (isset($_POST['login'])) {
                 <div class="card my-5">
                     <div class="card-body">
                         <div class="text-center">
-                            <a href="#"><img src="assets/images/logo-dark.svg" alt="Logo" class="mb-4"></a>
+                            <a href="#"><img src="assets/images/localoo tiffany.png" alt="Logo" class="mb-4" style="max-height: 60px;"></a>
                         </div>
                         <form method="POST" id="loginForm" novalidate>
                             <div class="text-center">
@@ -272,6 +368,16 @@ if (isset($_POST['login'])) {
                 errorElement.style.display = 'none';
             }
         });
+
+        // Pour la version foncée
+        if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
+            document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '../assets/images/localoo tiffany.png');
+        }
+
+        // Pour la version claire
+        if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
+            document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '../assets/images/localoo tiffany.png');
+        }
     </script>
 </body>
 </html>
