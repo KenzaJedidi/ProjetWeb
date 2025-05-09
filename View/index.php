@@ -107,7 +107,12 @@ $userC = new userC();
         <a href="signin.php" class="btn">Log In | Sign Up</a>
     <?php } else { ?>
         <a href="profile.php" class="btn"><?php echo htmlspecialchars($_SESSION['user']['nom'] . ' ' . htmlspecialchars($_SESSION['user']['prenom'])); ?></a>
-        <a href="logout.php">Log Out</a>
+        <a href="logout.php" class="btn btn-danger">Log Out</a>
+        <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') { ?>
+            <a href="admin/index.php" class="btn btn-primary" style="margin-left: 10px;">
+                <i class="fa fa-arrow-right"></i> Go to FrontA
+            </a>
+        <?php } ?>
     <?php } ?>
 </li>
 

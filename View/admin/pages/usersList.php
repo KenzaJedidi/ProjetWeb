@@ -57,7 +57,7 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
             --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 18px;
-            --transition: all 0.3s ease;
+            --transition: auto;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
@@ -260,7 +260,7 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
             font-size: 0.95rem;
         }
 
-        .table tbody tr {
+       .table tbody tr {
             transition: var(--transition);
         }
 
