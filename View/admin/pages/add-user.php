@@ -304,11 +304,238 @@ if (isset($_POST['submit'])) {
       .requirement.not-met {
         color: var(--text-light);
       }
+      
+      /* Sidebar styles from index.php */
+      .pc-sidebar {
+        background: #ffffff !important;
+        border-right: 1px solid #e9ecef;
+      }
+
+      .pc-navbar .pc-item {
+        position: relative;
+      }
+
+      .pc-navbar .pc-item .pc-link {
+        color: #344767;
+        padding: 12px 15px;
+        margin: 5px 10px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .pc-navbar .pc-item .pc-link:hover {
+        background: #f8f9fa;
+        color: #4680FF;
+      }
+
+      .pc-navbar .pc-item.active .pc-link {
+        background: #4680FF;
+        color: #ffffff;
+        box-shadow: 0 4px 8px rgba(70, 128, 255, 0.2);
+      }
+
+      .pc-navbar .pc-item.disabled .pc-link {
+        cursor: not-allowed;
+        background: #f8f9fa;
+      }
+
+      .pc-navbar .pc-item .pc-micon {
+        margin-right: 10px;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        background: rgba(70, 128, 255, 0.1);
+      }
+
+      .pc-navbar .pc-item.active .pc-micon {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .pc-item.pc-caption {
+        margin-top: 20px;
+        padding: 10px 15px;
+      }
+
+      .pc-item.pc-caption label {
+        color: #4680FF;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .pc-item.pc-caption span {
+        color: #67748e;
+        font-size: 11px;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .pc-navbar .pc-item.disabled .pc-micon {
+        background: rgba(108, 117, 125, 0.1);
+        color: #6c757d;
+      }
+
+      /* Logo styling - centered and extra large */
+      .m-header {
+          padding: 30px 15px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+          margin-bottom: 15px;
+          text-align: center;
+      }
+
+      .b-brand {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          width: 100%;
+      }
+
+      .b-brand:hover {
+          opacity: 0.9;
+          transform: translateY(-2px);
+      }
+
+      .logo {
+          max-height: 115px; /* Logo beaucoup plus grand */
+          width: auto;
+          display: block;
+          margin: 0 auto; /* Suppression de la marge en bas */
+          transition: all 0.3s ease;
+      }
+
+      /* Nous cachons le texte logo-text */
+      .logo-text {
+          display: none; /* Cache le texte */
+      }
     </style>
 </head>
 <body>
-    <?php include '../includes/sidebar.php'; ?>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
     
+    <!-- [ Mobile header ] start -->
+    <div class="pc-mob-header pc-header">
+        <div class="pcm-toolbar">
+            <a href="#!" class="pc-head-link" id="mobile-collapse">
+                <div class="hamburger hamburger--arrowturn">
+                    <div class="hamburger-box">
+                        <div class="hamburger-inner"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- [ navigation menu ] start -->
+    <nav class="pc-sidebar">
+        <div class="navbar-wrapper">
+            <div class="m-header">
+                <a href="#" class="b-brand">
+                    <img src="../../assets/img/localoo.png" alt="Localoo" class="logo" style="max-height: 115px;">
+                </a>
+            </div>
+            <div class="navbar-content">
+                <ul class="pc-navbar">
+                    <li class="pc-item">
+                        <a href="../index.php" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+                            <span class="pc-mtext">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="usersList.php" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-users"></i></span>
+                            <span class="pc-mtext">Users List</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item active">
+                        <a href="add-user.php" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+                            <span class="pc-mtext">Add User</span>
+                        </a>
+                    </li>
+
+                    <!-- Nouveaux boutons de gestion - version simplifiée -->
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-alert-circle"></i></span>
+                            <span class="pc-mtext">Reclamation</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-gift"></i></span>
+                            <span class="pc-mtext">Bon Plans</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-star"></i></span>
+                            <span class="pc-mtext">Review</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-messages"></i></span>
+                            <span class="pc-mtext">Forum</span>
+                        </a>
+                    </li>
+
+                    <!-- Separator -->
+                    <li class="pc-item pc-caption">
+                      
+                    </li>
+
+                    <!-- Éléments désactivés -->
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
+                            <span class="pc-mtext">Events</span>
+                            <span class="pc-arrow"></span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-briefcase"></i></span>
+                            <span class="pc-mtext">Emploi</span>
+                            <span class="pc-arrow"></span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item disabled">
+                        <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
+                            <span class="pc-micon"><i class="ti ti-bell"></i></span>
+                            <span class="pc-mtext">Notifications</span>
+                            <span class="pc-arrow"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="pc-container">
         <div class="pc-content">
             <div class="row">

@@ -523,6 +523,48 @@ $currentPage = 'dashboard';
             background: rgba(108, 117, 125, 0.1);
             color: #6c757d;
         }
+
+        /* Ajouter ce CSS à la fin de votre section style existante */
+
+        /* Logo styling - centered and extra large */
+        .m-header {
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .b-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .b-brand:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .logo {
+            max-height: 115px; /* Logo beaucoup plus grand */
+            width: auto;
+            display: block;
+            margin: 0 auto; /* Suppression de la marge en bas */
+            transition: all 0.3s ease;
+        }
+
+        /* Nous cachons le texte logo-text */
+        .logo-text {
+            display: none; /* Cache le texte */
+        }
     </style>
 </head>
 
@@ -551,8 +593,8 @@ $currentPage = 'dashboard';
     <nav class="pc-sidebar">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="index.php" class="b-brand">
-                    <img src="assets/images/logo.svg" alt="" class="logo logo-lg">
+                <a href="#" class="b-brand">
+                    <img src="../assets/img/localoo.png" alt="Localoo" class="logo" style="max-height: 115px;">
                 </a>
             </div>
             <div class="navbar-content">
@@ -578,13 +620,42 @@ $currentPage = 'dashboard';
                         </a>
                     </li>
 
-                    <!-- Separator -->
-                    <li class="pc-item pc-caption">
-                        <label>Coming Soon</label>
-                        <span>New Features</span>
+                    <!-- Nouveaux boutons de gestion - version simplifiée -->
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-alert-circle"></i></span>
+                            <span class="pc-mtext">Reclamation</span>
+                        </a>
                     </li>
 
-                    <!-- Nouveaux éléments désactivés -->
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-gift"></i></span>
+                            <span class="pc-mtext">Bon Plans</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-star"></i></span>
+                            <span class="pc-mtext">Review</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-messages"></i></span>
+                            <span class="pc-mtext">Forum</span>
+                        </a>
+                    </li>
+
+                    <!-- Separator -->
+                    <li class="pc-item pc-caption">
+                      
+                      
+                    </li>
+
+                    <!-- Éléments désactivés -->
                     <li class="pc-item disabled">
                         <a href="#!" class="pc-link" style="pointer-events: none; opacity: 0.6;">
                             <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>

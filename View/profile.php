@@ -605,19 +605,19 @@ if (isset($_GET['updated'])) {
                             <div class="form-group">
                                 <label class="form-label">Last Name</label>
                                 <input type="text" name="prenom" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['prenom']); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['prenom']) ? htmlspecialchars($_SESSION['user']['prenom']) : ''; ?>" required>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" name="email" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['email']); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['email']) ? htmlspecialchars($_SESSION['user']['email']) : ''; ?>" required>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label">Phone Number</label>
                                 <input type="tel" name="tel" class="form-control" 
-                                       value="<?php echo htmlspecialchars($_SESSION['user']['tel']); ?>" required>
+                                       value="<?php echo isset($_SESSION['user']['tel']) ? htmlspecialchars($_SESSION['user']['tel']) : ''; ?>" required>
                             </div>
                             
                             <div class="form-group">

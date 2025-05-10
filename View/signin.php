@@ -132,16 +132,16 @@ if (isset($_POST['login'])) {
             border-color: #dc3545 !important;
         }
 
-        /* Modifiez ces styles pour agrandir le logo */
+        /* Significantly enlarged logo styles */
         .navbar-brand img, 
         .logo-lg, 
         .logo-display,
         .logo-scrolled,
         .auth-wrapper .card img[alt="Logo"] {
-            max-height: 80px !important; /* Augmentation de la taille du logo */
+            max-height: 120px !important; /* Significantly larger logo */
             width: auto;
             object-fit: contain;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             transition: transform 0.3s ease;
         }
 
@@ -152,10 +152,11 @@ if (isset($_POST['login'])) {
             transform: scale(1.05);
         }
 
-        /* Ajustement pour la page de connexion admin */
+        /* Extra large logo for login page */
         .auth-wrapper .card .text-center img {
-            max-height: 90px !important; /* Logo encore plus grand sur la page de connexion */
-            margin: 0.5rem 0 1.5rem;
+            max-height: 180px !important; /* Much larger logo on the login page */
+            margin: 0.5rem 0 2rem;
+            filter: drop-shadow(0 6px 12px rgba(79, 192, 212, 0.25));
         }
 
         /* Pour le mode responsive - ajustez selon vos besoins */
@@ -164,11 +165,11 @@ if (isset($_POST['login'])) {
             .logo-lg, 
             .logo-display,
             .logo-scrolled {
-                max-height: 60px !important;
+                max-height: 100px !important;
             }
             
             .auth-wrapper .card .text-center img {
-                max-height: 70px !important;
+                max-height: 140px !important;
             }
         }
         
@@ -178,22 +179,12 @@ if (isset($_POST['login'])) {
             .logo-lg, 
             .logo-display,
             .logo-scrolled {
-                max-height: 50px !important;
+                max-height: 80px !important;
             }
             
             .auth-wrapper .card .text-center img {
-                max-height: 60px !important;
+                max-height: 120px !important;
             }
-        }
-
-        /* Agrandissement significatif du logo */
-        .auth-wrapper .card .text-center img {
-            max-height: 120px !important; /* Logo beaucoup plus grand */
-            width: auto;
-            object-fit: contain;
-            margin: 0.5rem 0 1.75rem;
-            transition: all 0.4s ease;
-            filter: drop-shadow(0 5px 10px rgba(79, 192, 212, 0.2));
         }
 
         /* Animation légère au chargement */
@@ -206,26 +197,26 @@ if (isset($_POST['login'])) {
             animation: logoEntrance 0.7s ease forwards;
         }
 
-        /* Effet au survol */
+        /* Enhanced hover effect */
         .auth-wrapper .card .text-center img:hover {
             transform: scale(1.08);
-            filter: drop-shadow(0 8px 16px rgba(79, 192, 212, 0.3));
+            filter: drop-shadow(0 10px 20px rgba(79, 192, 212, 0.35));
         }
 
-        /* Ajustements pour la page responsive */
+        /* Adjustments for large screens */
         @media (min-width: 992px) {
             .auth-wrapper .card .text-center img {
-                max-height: 140px !important; /* Encore plus grand sur les écrans larges */
+                max-height: 200px !important; /* Even larger on wide screens */
             }
         }
 
-        /* Ajustement du conteneur pour accueillir le logo plus grand */
+        /* Adjust container to accommodate larger logo */
         .auth-wrapper .card {
-            padding-top: 20px;
+            padding-top: 30px;
         }
         
         .auth-wrapper .card .text-center {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -244,7 +235,7 @@ if (isset($_POST['login'])) {
                 <div class="card my-5">
                     <div class="card-body">
                         <div class="text-center">
-                            <a href="#"><img src="admin/assets/images/localoo tiffany.png" alt="Logo" class="mb-4" style="max-height: 60px;"></a>
+                            <a href="#"><img src="admin/assets/images/localoo tiffany.png" alt="Logo" class="mb-4"></a>
                         </div>
                         <form method="POST" id="loginForm" novalidate>
                             <div class="text-center">

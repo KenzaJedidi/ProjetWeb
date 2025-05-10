@@ -76,6 +76,8 @@ $userC = new userC();
 				<li>
 					<div class="header-top-left">
 						<ul>
+							<!-- Added Localoo logo to the left sidebar -->
+							
 							<li class="select-opt">
 								<select name="language" id="language">
 									<option value="default">EN</option>
@@ -93,6 +95,9 @@ $userC = new userC();
 							<li class="select-opt">
 								<a href="#"><span class="lnr lnr-magnifier"></span></a>
 							</li>
+							
+							<!-- Admin navigation links - only visible when admin is logged in -->
+							
 						</ul>
 					</div>
 				</li>
