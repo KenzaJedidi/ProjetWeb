@@ -1,30 +1,113 @@
 <?php
-class User
-{
-    private $idUser=null ;
-    private $username=null ;
-   
+class User {
+    private $id_user;
+    private $nom;
+    private $prenom;
+    private $email;
+    private $password;
+    private $role;
+    private $tel;
+    private $profile_picture;
+    private $created_at; // Add this property
+    private $is_banned;
     
-    function __construct($username)
-    {
-        $this->username = $username;
+    public function __construct($id_user = null, $nom = null, $prenom = null, $email = null, 
+                                $password = null, $role = null, $tel = null, $profile_picture = null, 
+                                $created_at = null, $is_banned = false) {
+        $this->id_user = $id_user;
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->email = $email;
+        // Hash password if it's not already hashed
+        $this->password = (strlen($password) < 60) ? password_hash($password, PASSWORD_DEFAULT) : $password;
+        $this->role = $role;
+        $this->tel = $tel;
+        $this->profile_picture = $profile_picture;
+        $this->created_at = $created_at;
+        $this->is_banned = $is_banned;
     }
-
-    function getidUser()
-    {
-        return $this->$idUser;
+    
+    // Getters
+    public function getIdUser(): int {
+        return $this->id_user;
     }
-
-    function getUsername()
-    {
-        return $this->username;
+    
+    public function getNom(): string {
+        return $this->nom;
     }
-    function setUsername(string $username)
-    {
-        $this->username = $username;
+    
+    public function getPrenom(): string {
+        return $this->prenom;
     }
-
-
-
+    
+    public function getEmail(): string {
+        return $this->email;
+    }
+    
+    public function getPassword(): string {
+        return $this->password;
+    }
+    
+    public function getRole(): string {
+        return $this->role;
+    }
+    
+    public function getTel(): string {
+        return $this->tel;
+    }
+    
+    public function getProfilePicture() {
+        return $this->profile_picture;
+    }
+    
+    public function getCreatedAt() {
+        return $this->created_at ?? date('Y-m-d H:i:s');
+    }
+    
+    public function getIsBanned() {
+        return !empty($this->is_banned);
+    }
+    
+    // Setters
+    public function setIdUser(int $id_user): void {
+        $this->id_user = $id_user;
+    }
+    
+    public function setNom(string $nom): void {
+        $this->nom = $nom;
+    }
+    
+    public function setPrenom(string $prenom): void {
+        $this->prenom = $prenom;
+    }
+    
+    public function setEmail(string $email): void {
+        $this->email = $email;
+    }
+    
+    public function setPassword(string $password): void {
+        $this->password = $password;
+    }
+    
+    public function setRole(string $role): void {
+        $this->role = $role;
+    }
+    
+    public function setTel(string $tel): void {
+        $this->tel = $tel;
+    }
+    
+    public function setProfilePicture($profile_picture): void {
+        $this->profile_picture = $profile_picture;
+    }
+    
+    public function setIsBanned($is_banned) {
+        $this->is_banned = $is_banned ? 1 : 0;
+    }
+    
+    // Simple password check
+    public function checkPassword(string $inputPassword): bool {
+        return password_verify($inputPassword, $this->password);
+    }
 }
 ?>
