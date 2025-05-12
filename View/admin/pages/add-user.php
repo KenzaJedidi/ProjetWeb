@@ -316,16 +316,36 @@ if (isset($_POST['submit'])) {
       }
 
       .pc-navbar .pc-item .pc-link {
-        color: #344767;
-        padding: 12px 15px;
-        margin: 5px 10px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+        color: #000000 !important; /* Texte en noir */
       }
 
       .pc-navbar .pc-item .pc-link:hover {
         background: #f8f9fa;
-        color: #4680FF;
+        color: #000000 !important; /* Texte reste en noir au survol */
+      }
+
+      .pc-navbar .pc-item.active .pc-link {
+        background: #4680FF;
+        color: #ffffff !important; /* Le texte reste blanc pour l'élément actif */
+      }
+
+      .pc-item.pc-caption label {
+        color: #000000 !important;
+        opacity: 0.9;
+      }
+
+      .pc-item.pc-caption span {
+        color: #000000 !important;
+        opacity: 0.7;
+      }
+
+      .pc-navbar .pc-item.disabled .pc-link {
+        color: #6c757d !important;
+      }
+
+      .pc-navbar .pc-item .pc-link:hover {
+        background: #f8f9fa;
+        color: #000000 !important;
       }
 
       .pc-navbar .pc-item.active .pc-link {
@@ -467,7 +487,7 @@ if (isset($_POST['submit'])) {
                     </li>
 
                     <li class="pc-item active">
-                        <a href="add-user.php" class="pc-link">
+                        <a href="#" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
                             <span class="pc-mtext">Add User</span>
                         </a>

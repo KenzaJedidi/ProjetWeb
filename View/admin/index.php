@@ -565,6 +565,39 @@ $currentPage = 'dashboard';
         .logo-text {
             display: none; /* Cache le texte */
         }
+
+        /* Couleur du texte de la barre latérale en noir */
+        .pc-navbar .pc-item .pc-link {
+            color: #000000 !important; /* Texte en noir */
+        }
+
+        /* Hover avec texte toujours en noir */
+        .pc-navbar .pc-item .pc-link:hover {
+            background: #f8f9fa;
+            color: #000000 !important; /* Texte reste en noir au survol */
+        }
+
+        /* État actif avec contraste préservé (texte blanc sur fond bleu) */
+        .pc-navbar .pc-item.active .pc-link {
+            background: #4680FF;
+            color: #ffffff !important; /* Le texte reste blanc pour l'élément actif */
+        }
+
+        /* Couleur des textes de section en noir */
+        .pc-item.pc-caption label {
+            color: #000000 !important;
+            opacity: 0.9;
+        }
+
+        .pc-item.pc-caption span {
+            color: #000000 !important;
+            opacity: 0.7;
+        }
+
+        /* Éléments désactivés en gris foncé */
+        .pc-navbar .pc-item.disabled .pc-link {
+            color: #6c757d !important;
+        }
     </style>
 </head>
 
@@ -600,7 +633,7 @@ $currentPage = 'dashboard';
             <div class="navbar-content">
                 <ul class="pc-navbar">
                     <li class="pc-item active">
-                        <a href="index.php" class="pc-link">
+                        <a href="#" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
                             <span class="pc-mtext">Dashboard</span>
                         </a>

@@ -71,28 +71,37 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
             position: relative;
         }
 
+        /* Couleur du texte de la barre latérale en noir */
         .pc-navbar .pc-item .pc-link {
-            color: #344767;
-            padding: 12px 15px;
-            margin: 5px 10px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            color: #000000 !important; /* Texte en noir */
         }
 
+        /* Hover avec texte toujours en noir */
         .pc-navbar .pc-item .pc-link:hover {
             background: #f8f9fa;
-            color: #4680FF;
+            color: #000000 !important; /* Texte reste en noir au survol */
         }
 
+        /* État actif avec contraste préservé (texte blanc sur fond bleu) */
         .pc-navbar .pc-item.active .pc-link {
             background: #4680FF;
-            color: #ffffff;
-            box-shadow: 0 4px 8px rgba(70, 128, 255, 0.2);
+            color: #ffffff !important; /* Le texte reste blanc pour l'élément actif */
         }
 
+        /* Couleur des textes de section en noir */
+        .pc-item.pc-caption label {
+            color: #000000 !important;
+            opacity: 0.9;
+        }
+
+        .pc-item.pc-caption span {
+            color: #000000 !important;
+            opacity: 0.7;
+        }
+
+        /* Éléments désactivés en gris foncé */
         .pc-navbar .pc-item.disabled .pc-link {
-            cursor: not-allowed;
-            background: #f8f9fa;
+            color: #6c757d !important;
         }
 
         .pc-navbar .pc-item .pc-micon {
@@ -114,21 +123,6 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
         .pc-item.pc-caption {
             margin-top: 20px;
             padding: 10px 15px;
-        }
-
-        .pc-item.pc-caption label {
-            color: #4680FF;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .pc-item.pc-caption span {
-            color: #67748e;
-            font-size: 11px;
-            display: block;
-            margin-top: 4px;
         }
 
         .pc-navbar .pc-item.disabled .pc-micon {
@@ -912,7 +906,7 @@ $users = $userC->getFilteredUsers($searchTerm, $roleFilter, $sortBy);
                     </li>
 
                     <li class="pc-item active">
-                        <a href="usersList.php" class="pc-link">
+                        <a href="#" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-users"></i></span>
                             <span class="pc-mtext">Users List</span>
                         </a>
