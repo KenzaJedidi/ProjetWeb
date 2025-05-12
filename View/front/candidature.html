@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Candidatures - Localoo</title>
+    
+    <!-- CSS identique à front.php -->
+    <link rel="stylesheet" href="assets/css/speech-input.css">
+    <link rel="shortcut icon" type="image/icon" href="assets/images/logolocaloo.png"/>
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/linearicons.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootsnav.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+    <!-- Style spécifique aux candidatures -->
+    <style>
+        .mes-candidatures {
+            padding: 60px 0;
+            background-color: #f5f5f5;
+        }
+        .candidature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4e73df;
+        }
+        .candidature-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+        .candidature-card h3 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .candidature-info p {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .candidature-info strong {
+            color: #333;
+            width: 120px;
+            display: inline-block;
+        }
+        .text-success { color: #28a745; }
+        .text-warning { color: #ffc107; }
+        .text-danger { color: #dc3545; }
+        .supprimer-candidature, .modifier-candidature {
+            position: absolute;
+            top: 15px;
+            background: #f8f9fa;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .supprimer-candidature {
+            right: 15px;
+            color: #dc3545;
+        }
+        .supprimer-candidature:hover {
+            background: #dc3545;
+            color: white;
+        }
+        .modifier-candidature {
+            right: 55px;
+            color: #4e73df;
+        }
+        .modifier-candidature:hover {
+            background: #4e73df;
+            color: white;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .empty-state i {
+            font-size: 50px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        .empty-state h4 {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .btn-retour {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn-retour:hover {
+            background-color: #e9ecef;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== EN-TÊTE MODIFIÉE ========== -->
+    <section class="top-area">
+        <div class="header-area">
+            <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="index.php">
+                            <img src="assets/images/logolocaloo.png" alt="Localoo Logo" class="navbar-logo">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                            <li class="scroll"><a href="front.php#home">home</a></li>
+                            <li class="scroll"><a href="front.php#explore">emploi</a></li>
+                            <li class="scroll"><a href="front.php#events">events</a></li>
+                            <li class="scroll"><a href="front.php#reservation">réservation</a></li>
+                            <li class="scroll"><a href="front.phpreclamations">reclmation</a></li>
+                            <li class="scroll"><a href="front.php#blog">forum</a></li>
+                            <li class="scroll"><a href="front.php#contact">contact</a></li>
+                            <li class="scroll"><a href="front.php#account">my account</a></li>
+
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="clearfix"></div>
+    </section>
+
+    <!-- ========== SECTION CANDIDATURES ========== -->
+    <section id="mes-candidatures" class="mes-candidatures">
+        <div class="container">
+            <div class="section-header">
+                <h2>MES CANDIDATURES</h2>
+                <p>Retrouvez ici l'historique de vos candidatures chez Localoo</p>
+            </div>
+            
+            <div class="candidatures-list">
+                <div id="liste-candidatures" class="row">
+                    <!-- Les candidatures seront injectées ici par JavaScript -->
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="front.php#explore" class="btn-retour">
+                        <i class="fa fa-arrow-left"></i> Retour aux offres
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MODAL DE MODIFICATION ========== -->
+    <div class="modal fade" id="modifierCandidatureModal" tabindex="-1" role="dialog" aria-labelledby="modifierCandidatureModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifierCandidatureModalLabel">Modifier la Candidature</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formModifierCandidature" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="modifierNomComplet">Nom Complet *</label>
+                            <input type="text" class="form-control" id="modifierNomComplet" name="nom_complet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifierEmail">Email *</label>
+                            <input type="email" class="form-control" id="modifierEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifierTelephone">Téléphone</label>
+                            <input type="tel" class="form-control" id="modifierTelephone" name="telephone">
+                        </div>
+                        <div class="form-group">
+                            <label for="modifierCv">CV (PDF uniquement, max 2MB)</label>
+                            <input type="file" class="form-control-file" id="modifierCv" name="cv" accept=".pdf">
+                            <small class="form-text text-muted">Laissez vide pour conserver le CV actuel.</small>
+                        </div>
+                        <div class="form-group speech-input-group">
+                            <label for="modifierMessage">Message de motivation</label>
+                            <textarea class="form-control" id="modifierMessage" name="message" rows="5"></textarea>
+                            <button type="button" id="start-speech-modifier" class="btn btn-outline-primary mt-2">
+                                <i class="fa fa-microphone"></i> Enregistrer un message vocal
+                            </button>
+                            <span id="speech-status-modifier" class="text-muted ml-2"></span>
+                        </div>
+                        <input type="hidden" id="modifierCandidatureId" name="candidature_id">
+                        <input type="hidden" id="modifierOffreId" name="offre_id">
+                        <input type="hidden" id="modifierPoste" name="poste">
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Mettre à jour la candidature</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PIED DE PAGE ========== -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-menu">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="index.php">local<span>oo</span></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul class="footer-menu-item">
+                            <li class="scroll"><a href="front.php">how it works</a></li>
+                            <li class="scroll"><a href="front.php?scroll=explore">explore</a></li>
+                            <li class="scroll"><a href="front.php">réservation</a></li>
+                            <li class="scroll"><a href="front.php">blog</a></li>
+                            <li class="scroll"><a href="front.php">contact</a></li>
+                            <li class="scroll"><a href="front.php">my account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="hm-footer-copyright">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <p>©copyright. designed and developed by <a href="https://www.themesine.com/">themesine</a></p>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="footer-social">
+                            <span><i class="fa fa-phone"> +1 (222) 777 8888</i></span>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-google-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="scroll-Top">
+            <div class="return-to-top">
+                <i class="fa fa-angle-up" id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootsnav.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <!-- ========== SCRIPT DE GESTION DES CANDIDATURES ========== -->
+    <script>
+    $(document).ready(function() {
+        function chargerCandidatures() {
+            $.ajax({
+                url: '../../Controller/CandidatureController.php?action=getCandidatures',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    const container = $('#liste-candidatures');
+                    container.empty();
+                    
+                    if (!response.success || response.candidatures.length === 0) {
+                        container.html(`
+                            <div class="col-12">
+                                <div class="empty-state">
+                                    <i class="far fa-folder-open"></i>
+                                    <h4>Vous n'avez aucune candidature enregistrée</h4>
+                                    <p>Postulez à nos offres d'emploi pour voir apparaître vos candidatures ici</p>
+                                </div>
+                            </div>
+                        `);
+                        return;
+                    }
+                    
+                    response.candidatures.forEach(function(candidature) {
+                        const statusClass = 
+                            candidature.status === 'Accepté' ? 'text-success' : 
+                            candidature.status === 'Rejeté' ? 'text-danger' : 'text-warning';
+                        
+                        container.append(`
+                            <div class="col-md-6">
+                                <div class="candidature-card">
+                                    <button class="modifier-candidature" data-id="${candidature.id}">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="supprimer-candidature" data-id="${candidature.id}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <h3>${candidature.poste}</h3>
+                                    <div class="candidature-info">
+                                        <p><strong>Nom complet:</strong> ${candidature.nom_complet || ''}</p>
+                                        <p><strong>Email:</strong> ${candidature.email || ''}</p>
+                                        ${candidature.telephone ? `<p><strong>Téléphone:</strong> ${candidature.telephone}</p>` : ''}
+                                        <p><strong>Date:</strong> ${candidature.date_postulation}</p>
+                                        <p><strong>Statut:</strong> <span class="${statusClass}">${candidature.status}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur lors du chargement des candidatures :', error);
+                    $('#liste-candidatures').html(`
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h4>Erreur de chargement</h4>
+                                <p>Impossible de charger les candidatures. Veuillez réessayer plus tard.</p>
+                            </div>
+                        </div>
+                    `);
+                }
+            });
+        }
+        
+        chargerCandidatures();
+        
+        $(document).on('click', '.supprimer-candidature', function() {
+            const id = $(this).data('id');
+            if (confirm('Voulez-vous vraiment supprimer cette candidature ?')) {
+                $.ajax({
+                    url: '../../Controller/CandidatureController.php',
+                    type: 'POST',
+                    data: {
+                        action: 'delete',
+                        candidature_id: id
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Candidature supprimée avec succès !');
+                            chargerCandidatures();
+                        } else {
+                            alert('Erreur : ' + (response.message || 'Une erreur est survenue'));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erreur serveur : ' + error);
+                    }
+                });
+            }
+        });
+        
+        $(document).on('click', '.modifier-candidature', function() {
+            const id = $(this).data('id');
+            
+            $.ajax({
+                url: '../../Controller/CandidatureController.php?action=getCandidature&id=' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (!response.success || !response.candidature) {
+                        alert('Erreur : Candidature non trouvée.');
+                        return;
+                    }
+                    
+                    const candidature = response.candidature;
+                    
+                    $('#modifierCandidatureId').val(candidature.id || '');
+                    $('#modifierOffreId').val(candidature.offre_id || '');
+                    $('#modifierPoste').val(candidature.poste || '');
+                    $('#modifierNomComplet').val(candidature.nom_complet || '');
+                    $('#modifierEmail').val(candidature.email || '');
+                    $('#modifierTelephone').val(candidature.telephone || '');
+                    $('#modifierMessage').val(candidature.message || '');
+                    
+                    $('#modifierCandidatureModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    alert('Erreur serveur : Impossible de charger la candidature.');
+                }
+            });
+        });
+        
+        $('#formModifierCandidature').submit(function(e) {
+            e.preventDefault();
+            
+            if ($('#modifierNomComplet').val() === '' || $('#modifierEmail').val() === '' || $('#modifierOffreId').val() === '') {
+                alert('Veuillez remplir tous les champs obligatoires');
+                return false;
+            }
+            
+            const fileInput = $('#modifierCv')[0];
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (file.type !== 'application/pdf') {
+                    alert('Veuillez sélectionner un fichier PDF');
+                    return false;
+                }
+                if (file.size > 2097152) {
+                    alert('Le fichier ne doit pas dépasser 2MB');
+                    return false;
+                }
+            }
+            
+            const formData = new FormData();
+            formData.append('action', 'update');
+            formData.append('candidature_id', $('#modifierCandidatureId').val());
+            formData.append('offre_id', $('#modifierOffreId').val());
+            formData.append('nom_complet', $('#modifierNomComplet').val());
+            formData.append('email', $('#modifierEmail').val());
+            formData.append('telephone', $('#modifierTelephone').val());
+            formData.append('poste', $('#modifierPoste').val());
+            formData.append('message', $('#modifierMessage').val());
+            if (fileInput.files.length > 0) {
+                formData.append('cv', fileInput.files[0]);
+            }
+            
+            $.ajax({
+                url: '../../Controller/CandidatureController.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('Candidature mise à jour avec succès !');
+                        $('#modifierCandidatureModal').modal('hide');
+                        $('#formModifierCandidature')[0].reset();
+                        chargerCandidatures();
+                    } else {
+                        alert('Erreur : ' + (response.message || 'Une erreur est survenue'));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Erreur serveur : ' + error);
+                }
+            });
+        });
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('#scroll-Top').addClass('active');
+            } else {
+                $('#scroll-Top').removeClass('active');
+            }
+        });
+        
+        $('#scroll-Top').on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop: 0}, '300');
+        });
+    });
+    </script>
+    <script src="assets/js/speech-to-text.js"></script>
+    
+</body>
+</html>
